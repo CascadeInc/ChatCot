@@ -1,0 +1,89 @@
+body {
+    height: auto;
+    margin:0;
+    padding:0;
+	font-family: Sans-Serif;
+	line-height: 1.5em;
+}
+			
+#header {
+    position: relative;
+    background: #ccc;
+	height: 200px;
+}
+			
+#header h1 {
+    position: relative;
+    margin: 0;
+	padding-top: 55px;
+    left: 250px;
+}
+
+#logo{
+    position:absolute;
+    transform: scale(0.55) translate(-60px, -90px);
+}
+
+.searchDiv {
+    position: absolute;
+    right: 110px;
+    bottom: 10px;
+}
+
+main {
+    float: left;
+    width: 100%;
+}
+			
+#nav {
+    min-height: 100hv;
+    float: left;
+    width: 230px;
+    margin-left: -100%;
+    background: #eee;
+}
+					
+#wrapper {
+    overflow: hidden;
+    float: left;
+}
+						
+#content {
+    margin-left: 230px; /* Same as 'nav' width */
+}
+			
+.innertube {
+    margin: 15px; /* Padding for content */
+    margin-top: 0;	
+}	
+
+p {
+    color: #555;	
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;	
+}
+
+nav ul a {
+    color: darkgreen;
+    text-decoration: none;	
+}
+
+.addBtn {
+  padding: 10px;
+  width: 25%;
+  background: #d9d9d9;
+  color: #555;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addBtn:hover {
+  background-color: #bbb;
+}
+		
