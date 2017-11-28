@@ -8,23 +8,23 @@
 	</head>
 	
 	<body>		
-
 		<header id="header">
 			<div class="innertube">
                 <img id="logo" src="src/icon.png" aling="left"/>
-				<h1>ToDo List</h1>
+				<h1 >ToDo</h1><h1>List</h1>
                 <div class="searchDiv">
                     <input type="text" id="searchForm" placeholder="Write here search information">
-                    <span class="searchBtn btn">Search</span>
+                    <span class="addBtn" id="searchBtn">Search</span>
                 </div>
 			</div>
 		</header>             
 		
+        <hr>
+        
 		<div id="wrapper">
 		
 			<main>
 				<div id="content">
-					<div class="innertube">
 						<div class="addToDo">
                             <input type="text" id="descForm" placeholder="Describe youre task">
                             <input type="date" id="dateForm"/> 
@@ -32,19 +32,19 @@
                         </div>
                         <div class="Tasks" id="Tasks">
                         </div>
-					</div>
+					
 				</div>
 			</main>
 			
 			<nav id="nav">
 				<div class="innertube">
 					<ul>
-                        <li><span class="btn" id="allList">All</span></li>
-                        <li><span id="todayList">Today</span></li>
-                        <li><span id="next7DayList">Next 7 days</span></li>
-						<li><span id="overdueList">Overdue</span></li>
-                        <li><span class="btn" id="doneList">Done</span></li>
-                        <li><span id="forgottenList">Forgotten</span></li>
+                        <li><span class="menubtn" id="allList">All</span></li>
+                        <li><span class="menubtn" id="todayList">Today</span></li>
+                        <li><span class="menubtn" id="next7DayList">Next 7 days</span></li>
+						<li><span class="menubtn" id="overdueList">Overdue</span></li>
+                        <li><span class="menubtn" id="doneList">Done</span></li>
+                        <li><span class="menubtn" id="forgottenList">Forgotten</span></li>
                         
 					</ul>					
 				</div>

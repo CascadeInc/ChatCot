@@ -2,22 +2,31 @@ body {
     height: auto;
     margin:0;
     padding:0;
-	font-family: Sans-Serif;
+	font-family: lucida console;
 	line-height: 1.5em;
 }
 			
 #header {
     position: relative;
-    background: #ccc;
+    background: linear-gradient(0deg, #d6e5ff, #005cff);
 	height: 200px;
 }
 			
 #header h1 {
     position: relative;
+    font-family: 'Baloo Tamma', cursive;
     margin: 0;
-	padding-top: 55px;
+    color: white;
+	padding-top: 45px;
+    padding-bottom: -10px;
     left: 250px;
+    font-variant: small-caps;
+  letter-spacing: 5px;
+   text-shadow: 3px 3px 0px #4787f7,
+    6px 6px 0px #063484;
+    font-size: 80px;
 }
+
 
 #logo{
     position:absolute;
@@ -36,11 +45,11 @@ main {
 }
 			
 #nav {
-    min-height: 100hv;
+    min-height: 300hv;
     float: left;
     width: 230px;
     margin-left: -100%;
-    background: #eee;
+    border-right: 2px solid #0d47ad;
 }
 					
 #wrapper {
@@ -57,37 +66,102 @@ main {
     margin-top: 0;	
 }	
 
-p {
-    color: #555;	
-}
-
 nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;	
+    list-style-type: none;	
 }
 
-nav ul a {
-    color: darkgreen;
-    text-decoration: none;	
+li {
+    margin-top: 15px;
 }
 
 .Task {
     padding: 20px;
+    margin: 5px;
+    border: 3px solid #0d47ad;
+    border-radius: 15px;
+    position: relative;
 }
 
-.btn {
-  padding: 10px;
-  width: 25%;
-  background: #d9d9d9;
-  color: #555;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
+.addToDo {
+    margin-left: 25px;
+    margin-top: 10px; 
+    margin-bottom: 10px;
 }
 
-.btn:hover {
-  background-color: #bbb;
+.EmptyH2 {
+    margin-left: 50px;
 }
-		
+
+#descForm, #searchForm, #dateForm {
+    border-radius: 3px;
+    height: 30px;
+}
+
+#searchForm {
+    width: 190px;
+}
+
+.addBtn{
+    width: 150px;
+    right:10px;
+    top: -5px;
+    padding: 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    color: #80a2dd;
+    background: #dbe8ff;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+.addBtn:hover{
+    background: black;
+}
+
+.menubtn {
+    padding: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 25%;
+    color: #80a2dd;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.menubtn:hover {
+  color: #0c409b;
+}
+
+.deletebtn {
+    position:  absolute;
+    right:10px;
+    top: -5px;
+    padding: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 25%;
+    color: #80a2dd;
+    background: #dbe8ff;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 15px;
+}
+
+.deletebtn:hover {
+    background: #49566b;
+}
+
+hr {
+    border: none; /* Убираем границу */
+    background-color: #0d47ad; /* Цвет линии */
+    color: #0d47ad; /* Цвет линии для IE6-7 */
+    height: 2px; /* Толщина линии */
+    padding: 0;
+    margin: 0;
+   }
