@@ -54,7 +54,7 @@ window.onload = function() {
         var strDateNow = year + "-" + month + "-" + day;
         
         for (var key in todoList) {
-            if (todoList[key].date.localeCompare(strDateNow) == 0){
+            if ((todoList[key].date.localeCompare(strDateNow) == 0)&&(todoList[key].check==false)){
                 writeItem(key);
             }
         }
