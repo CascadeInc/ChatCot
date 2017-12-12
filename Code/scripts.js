@@ -54,7 +54,7 @@ window.onload = function() {
         var strDateNow = year + "-" + month + "-" + day;
         
         for (var key in todoList) {
-            if ((todoList[key].date.localeCompare(strDateNow) == 0)&&(todoList[key].check==false)){
+            if ((todoList[key].date.localeCompare(strDateNow) == 0) && (todoList[key].check==false)){
                 writeItem(key);
             }
         }
@@ -78,7 +78,7 @@ window.onload = function() {
             day = todoList[key].date.substring(8);
             var deadline = new Date(year, month, day, 0, 0, 0, 0);
             //alert(deadline - now);
-            if ((deadline - refNow < 688248497) && (deadline - refNow >= 0)){
+            if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (todoList[key].check==false)){
                 writeItem(key);
             }
         }
@@ -105,7 +105,7 @@ window.onload = function() {
             day = todoList[key].date.substring(8);
             var deadline = new Date(year, month, day, 0, 0, 0, 0);
             //alert(deadline - now);
-            if (deadline - refNow < 0) {
+            if ((deadline - refNow < 0) && (todoList[key].check==false)) {
                 writeItem(key);
             }
         }
@@ -132,7 +132,7 @@ window.onload = function() {
             day = todoList[key].date.substring(8);
             var deadline = new Date(year, month, day, 0, 0, 0, 0);
             //alert(deadline - now);
-            if ((deadline - refNow < -688248497) && (deadline - refNow < 0)) {
+            if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (todoList[key].check==false)) {
                 writeItem(key);
             }
         }
