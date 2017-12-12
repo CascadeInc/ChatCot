@@ -1,4 +1,4 @@
-window.onload = function(){
+window.onload = function() {
     
     var todoList = [];
     if (localStorage.getItem('todo')!=undefined) {
@@ -7,7 +7,7 @@ window.onload = function(){
     }
     var glId = todoList.length;
     
-    document.getElementById('addBtn').onclick = function (){
+    document.getElementById('addBtn').onclick = function () {
         var d = document.getElementById('descForm').value;
         var temp = {};
         temp.todo = d;
@@ -24,17 +24,23 @@ window.onload = function(){
     
     document.getElementById('allList').onclick = function() {
         writeNoteDoneList();
-        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}  
+        if (document.getElementById('Tasks').innerHTML == '') {
+            writeEmptyMessage();
+        }  
     }
     
     document.getElementById('doneList').onclick = function() {
         document.getElementById('Tasks').innerHTML = '';
-        for (var key in todoList){
-            if (todoList[key].check == true){
+        
+        for (var key in todoList) {
+            if (todoList[key].check == true) {
                 writeDoneItem(key);
             }
         }
-        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
+        
+        if (document.getElementById('Tasks').innerHTML == '') {
+            writeEmptyMessage();
+        }
     }
     
     document.getElementById('todayList').onclick = function() {
@@ -44,12 +50,16 @@ window.onload = function(){
         var month = now.getMonth() + 1;
         var day = now.getDate();
         var strDateNow = year + "-" + month + "-" + day;
-        for (var key in todoList){
+        
+        for (var key in todoList) {
             if (todoList[key].date.localeCompare(strDateNow) == 0){
                 writeItem(key);
             }
         }
-        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
+        
+        if (document.getElementById('Tasks').innerHTML == '') {
+            writeEmptyMessage();
+        }
     }
     
     document.getElementById('next7DayList').onclick = function() {
@@ -59,7 +69,8 @@ window.onload = function(){
         var month = now.getMonth();
         var day = now.getDate();
         var refNow = new Date(year, month, day, 0, 0, 0, 0);
-        for (var key in todoList){
+        
+        for (var key in todoList) {
             year = todoList[key].date.substring(0, 4);
             month = todoList[key].date.substring(5, 7) -1;
             day = todoList[key].date.substring(8);
@@ -69,7 +80,10 @@ window.onload = function(){
                 writeItem(key);
             }
         }
-        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
+        
+        if (document.getElementById('Tasks').innerHTML == '') {
+            writeEmptyMessage();
+        }
     }
     
     document.getElementById('overdueList').onclick = function() {
@@ -79,8 +93,11 @@ window.onload = function(){
         var month = now.getMonth();
         var day = now.getDate();
         var refNow = new Date(year, month, day, 0, 0, 0, 0);
-        for (var key in todoList){
-            if (todoList[key].date == "") {continue;}
+        
+        for (var key in todoList) {
+            if (todoList[key].date == "") {
+                continue;
+            }
             year = todoList[key].date.substring(0, 4);
             month = todoList[key].date.substring(5, 7) -1;
             day = todoList[key].date.substring(8);
@@ -90,7 +107,10 @@ window.onload = function(){
                 writeItem(key);
             }
         }
-        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
+        
+        if (document.getElementById('Tasks').innerHTML == '') {
+            writeEmptyMessage();
+        }
     }
     
     document.getElementById('forgottenList').onclick = function() {
@@ -100,47 +120,60 @@ window.onload = function(){
         var month = now.getMonth();
         var day = now.getDate();
         var refNow = new Date(year, month, day, 0, 0, 0, 0);
-        for (var key in todoList){
-            if (todoList[key].date == "") {continue;}
+        
+        for (var key in todoList) {
+            if (todoList[key].date == "") {
+                continue;
+            }
             year = todoList[key].date.substring(0, 4);
             month = todoList[key].date.substring(5, 7) -1;
             day = todoList[key].date.substring(8);
             var deadline = new Date(year, month, day, 0, 0, 0, 0);
             //alert(deadline - now);
-            if ((deadline - refNow < -688248497) && (deadline - refNow < 0)){
+            if ((deadline - refNow < -688248497) && (deadline - refNow < 0)) {
                 writeItem(key);
             }
         }
-        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
+        
+        if (document.getElementById('Tasks').innerHTML == '') {
+            writeEmptyMessage();
+        }
     }
     
     document.getElementById('searchBtn').onclick = function() {
         document.getElementById('Tasks').innerHTML = '';
         var searchName = document.getElementById("searchForm").value;
-        for (var key in todoList){
-            if (todoList[key].todo.indexOf(searchName)>=0)
-                {
+        
+        for (var key in todoList) {
+            if (todoList[key].todo.indexOf(searchName)>=0) {
                     writeItem(key);
                 }
         }
-        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
+        
+        if (document.getElementById('Tasks').innerHTML == '') {
+            writeEmptyMessage();
+        }
     }
     
     function writeNoteDoneList() {
         document.getElementById('Tasks').innerHTML = '';
-        for (var key in todoList){
-            
+        
+        for (var key in todoList) {
             if (todoList[key].check == false){
                 writeItem(key);
             }
         }
-        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
+        
+        if (document.getElementById('Tasks').innerHTML == '') {
+            writeEmptyMessage();
+        }
     }
     
     function writeItem(key) {
         var div = document.createElement('div');
         div.className = "Task"+todoList[key].id+" Task";
         div.innerHTML = "<input type='checkbox' id='checkbox" + todoList[key].id + "'>" + todoList[key].todo + "<span  class='deletebtn' id='span" + todoList[key].id + "'>Delete</span>";
+        
         document.getElementById('Tasks').appendChild(div);
         //document.getElementById('span0').addEventListener("onclick", deleteItem);
         document.getElementById('span'+ todoList[key].id).onclick = deleteItem;
@@ -151,6 +184,7 @@ window.onload = function(){
         var div = document.createElement('div');
         div.className = "Task"+todoList[key].id+" Task";
         div.innerHTML = todoList[key].todo + "<span  class='deletebtn' id='span" + todoList[key].id + "'>Delete</span>";
+        
         document.getElementById('Tasks').appendChild(div);
         document.getElementById('span'+ todoList[key].id).onclick = deleteItem;
     }
@@ -162,13 +196,14 @@ window.onload = function(){
         var elem = document.getElementsByClassName('Task'+id);
         var el = elem[0];
         el.parentNode.removeChild(el);  
+        
         for (var key in todoList) {
-            if (id == todoList[key].id)
-                {
+            if (id == todoList[key].id) {
                     todoList[key].check = true;
                     break;
                 }
         }
+        
         localStorage.setItem('todo', JSON.stringify(todoList));
     }
     
@@ -178,6 +213,7 @@ window.onload = function(){
         var elem = document.getElementsByClassName('Task'+id);
         var el = elem[0];
         el.parentNode.removeChild(el);
+        
         for (var key in todoList) {
             if (id == todoList[key].id)
                 {
@@ -185,6 +221,7 @@ window.onload = function(){
                     break;
                 }
         }
+        
         localStorage.setItem('todo', JSON.stringify(todoList));
     }
     
