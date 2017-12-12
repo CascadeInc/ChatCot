@@ -49,6 +49,7 @@ window.onload = function(){
                 writeItem(key);
             }
         }
+        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
     }
     
     document.getElementById('next7DayList').onclick = function() {
@@ -68,6 +69,7 @@ window.onload = function(){
                 writeItem(key);
             }
         }
+        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
     }
     
     document.getElementById('overdueList').onclick = function() {
@@ -88,6 +90,7 @@ window.onload = function(){
                 writeItem(key);
             }
         }
+        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
     }
     
     document.getElementById('forgottenList').onclick = function() {
@@ -108,6 +111,7 @@ window.onload = function(){
                 writeItem(key);
             }
         }
+        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
     }
     
     document.getElementById('searchBtn').onclick = function() {
@@ -119,6 +123,7 @@ window.onload = function(){
                     writeItem(key);
                 }
         }
+        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
     }
     
     function writeNoteDoneList() {
@@ -129,6 +134,7 @@ window.onload = function(){
                 writeItem(key);
             }
         }
+        if (document.getElementById('Tasks').innerHTML == '') {writeEmptyMessage();}
     }
     
     function writeItem(key) {
