@@ -9,6 +9,7 @@ window.onload = function() {
     
     document.getElementById('addBtn').onclick = function () {
         var d = document.getElementById('descForm').value;
+        if (d!=""){
         var temp = {};
         temp.todo = d;
         temp.check = false;
@@ -20,6 +21,7 @@ window.onload = function() {
         glId = glId + 1;
         localStorage.setItem('todo', JSON.stringify(todoList));
         writeItem(glId-1);
+        }
     }
     
     document.getElementById('allList').onclick = function() {
