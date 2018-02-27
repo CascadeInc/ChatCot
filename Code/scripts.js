@@ -174,12 +174,13 @@ window.onload = function() {
     function writeItem(key) {
         var div = document.createElement('div');
         div.className = "Task"+todoList[key].id+" Task";
-        div.innerHTML = "<input type='checkbox' id='checkbox" + todoList[key].id + "'>" + todoList[key].todo + "<span  class='deletebtn' id='span" + todoList[key].id + "'>Delete</span>";
+        div.innerHTML = "<input type='checkbox' id='checkbox" + todoList[key].id + "'>" + todoList[key].todo + "<span  class='deletebtn' id='span" + todoList[key].id + "'>Delete</span>"+"<span  class='editbtn' id='edit" + todoList[key].id + "'>Edit</span>";
         
         document.getElementById('Tasks').appendChild(div);
         //document.getElementById('span0').addEventListener("onclick", deleteItem);
         document.getElementById('span'+ todoList[key].id).onclick = deleteItem;
         document.getElementById('checkbox'+ todoList[key].id).onclick = checkItem;
+        document.getElementById('edit'+todoList[key].id).onclick = editItem;
     }
     
     function writeDoneItem(key) {
@@ -209,6 +210,23 @@ window.onload = function() {
         localStorage.setItem('todo', JSON.stringify(todoList));
     }
     
+    function editItem() {
+        var str = this.id;
+        var id = str.substring(4);
+        var elem = document.getElementsByClassName('Task'+id);
+        var el = elem[0];
+        el.parentNode.removeChild(el);  
+        var newDesc = prompt("Write new description", "write description here");
+        for (var key in todoList) {
+            if (id == todoList[key].id) {
+                    todoList[key].todo  = newDesc;
+                    break;
+                }
+        }
+        localStorage.setItem('todo', JSON.stringify(todoList));
+        writeNoteDoneList();
+    }
+    
     function deleteItem() {
         var str = this.id;
         var id = str.substring(4);
@@ -225,6 +243,7 @@ window.onload = function() {
         }
         
         localStorage.setItem('todo', JSON.stringify(todoList));
+        writeNoteDoneList();    
     }
     
     function writeEmptyMessage() {
