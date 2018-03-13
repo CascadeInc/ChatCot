@@ -1,4 +1,4 @@
-window.onload = function() {
+window.onload = function () {
 
     var todoList = [];
     if (localStorage.getItem('todo') != undefined) {
@@ -7,7 +7,7 @@ window.onload = function() {
     }
     var glId = todoList.length;
 
-    document.getElementById('addBtn').onclick = function() {
+    document.getElementById('addBtn').onclick = function () {
         var d = document.getElementById('descForm').value;
         if (d != "") {
             var temp = {};
@@ -15,23 +15,26 @@ window.onload = function() {
             temp.check = false;
             temp.id = glId;
             d = document.getElementById("dateForm").value; //2017-11-26
-            temp.date = d;
-            //if (d=='') {alert("123");}
+            var date = new Date(d);
+            if (isNaN(date.getTime()))
+                date = new Date();
+            date.setHours(0, 0, 0, 0);
+            temp.date = date.toDateString();
             todoList[glId] = temp;
-            glId = glId + 1;
             localStorage.setItem('todo', JSON.stringify(todoList));
-            writeItem(glId - 1);
+            writeNoteDoneList();
+            glId++;
         }
     }
 
-    document.getElementById('allList').onclick = function() {
+    document.getElementById('allList').onclick = function () {
         writeNoteDoneList();
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
     }
 
-    document.getElementById('doneList').onclick = function() {
+    document.getElementById('doneList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
 
         for (var key in todoList) {
@@ -45,16 +48,13 @@ window.onload = function() {
         }
     }
 
-    document.getElementById('todayList').onclick = function() {
+    document.getElementById('todayList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
         var now = new Date();
-        var year = now.getFullYear();
-        var month = now.getMonth() + 1;
-        var day = now.getDate();
-        var strDateNow = year + "-" + month + "-" + day;
+        now.setHours(0, 0, 0, 0);
 
         for (var key in todoList) {
-            if ((todoList[key].date.localeCompare(strDateNow) == 0) && (todoList[key].check == false)) {
+            if ((todoList[key].date.localeCompare(now.toDateString()) == 0) && (todoList[key].check == false)) {
                 writeItem(key);
             }
         }
@@ -64,19 +64,14 @@ window.onload = function() {
         }
     }
 
-    document.getElementById('next7DayList').onclick = function() {
+    document.getElementById('next7DayList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
-        var now = new Date();
-        var year = now.getFullYear();
-        var month = now.getMonth();
-        var day = now.getDate();
-        var refNow = new Date(year, month, day, 0, 0, 0, 0);
+
+        var refNow = new Date();
+        refNow.setHours(0, 0, 0, 0)
 
         for (var key in todoList) {
-            year = todoList[key].date.substring(0, 4);
-            month = todoList[key].date.substring(5, 7) - 1;
-            day = todoList[key].date.substring(8);
-            var deadline = new Date(year, month, day, 0, 0, 0, 0);
+            var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
             //alert(deadline - now);
             if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (todoList[key].check == false)) {
                 writeItem(key);
@@ -88,22 +83,15 @@ window.onload = function() {
         }
     }
 
-    document.getElementById('overdueList').onclick = function() {
+    document.getElementById('overdueList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
-        var now = new Date();
-        var year = now.getFullYear();
-        var month = now.getMonth();
-        var day = now.getDate();
-        var refNow = new Date(year, month, day, 0, 0, 0, 0);
+        var refNow = new Date().setHours(0, 0, 0, 0);
 
         for (var key in todoList) {
             if (todoList[key].date == "") {
                 continue;
             }
-            year = todoList[key].date.substring(0, 4);
-            month = todoList[key].date.substring(5, 7) - 1;
-            day = todoList[key].date.substring(8);
-            var deadline = new Date(year, month, day, 0, 0, 0, 0);
+            var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
             //alert(deadline - now);
             if ((deadline - refNow < 0) && (todoList[key].check == false)) {
                 writeItem(key);
@@ -115,22 +103,15 @@ window.onload = function() {
         }
     }
 
-    document.getElementById('forgottenList').onclick = function() {
+    document.getElementById('forgottenList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
-        var now = new Date();
-        var year = now.getFullYear();
-        var month = now.getMonth();
-        var day = now.getDate();
-        var refNow = new Date(year, month, day, 0, 0, 0, 0);
+        var refNow = new Date().setHours(0, 0, 0, 0);
 
         for (var key in todoList) {
             if (todoList[key].date == "") {
                 continue;
             }
-            year = todoList[key].date.substring(0, 4);
-            month = todoList[key].date.substring(5, 7) - 1;
-            day = todoList[key].date.substring(8);
-            var deadline = new Date(year, month, day, 0, 0, 0, 0);
+            var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
             //alert(deadline - now);
             if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (todoList[key].check == false)) {
                 writeItem(key);
@@ -142,7 +123,7 @@ window.onload = function() {
         }
     }
 
-    document.getElementById('searchBtn').onclick = function() {
+    document.getElementById('searchBtn').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
         var searchName = document.getElementById("searchForm").value;
 
