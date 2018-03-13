@@ -1,7 +1,7 @@
 window.onload = function () {
 
     var todoList = [];
-    if (localStorage.getItem('todo') !== undefined) {
+    if (localStorage.getItem('todo') != undefined) {
         todoList = JSON.parse(localStorage.getItem('todo'));
         writeNoteDoneList();
     }
@@ -9,12 +9,12 @@ window.onload = function () {
 
     document.getElementById('addBtn').onclick = function () {
         var d = document.getElementById('descForm').value;
-        if (d !== "") {
+        if (d != "") {
             var temp = {};
             temp.todo = d;
             temp.check = false;
             temp.id = glId;
-            d = document.getElementById("dateForm").value; //2017-11-26
+            d = document.getElementById("dateForm").value;
             var date = new Date(d);
             if (isNaN(date.getTime()))
                 date = new Date();
@@ -38,12 +38,12 @@ window.onload = function () {
         document.getElementById('Tasks').innerHTML = '';
 
         for (var key in todoList) {
-            if (todoList[key].check === true) {
+            if (todoList[key].check == true) {
                 writeDoneItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML === '') {
+        if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
     };
@@ -54,12 +54,12 @@ window.onload = function () {
         now.setHours(0, 0, 0, 0);
 
         for (var key in todoList) {
-            if ((todoList[key].date.localeCompare(now.toDateString()) === 0) && (todoList[key].check === false)) {
+            if ((todoList[key].date.localeCompare(now.toDateString()) == 0) && (todoList[key].check == false)) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML === '') {
+        if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
     };
@@ -73,12 +73,12 @@ window.onload = function () {
         for (var key in todoList) {
             var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
             //alert(deadline - now);
-            if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (todoList[key].check === false)) {
+            if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (todoList[key].check == false)) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML === '') {
+        if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
     };
@@ -88,17 +88,17 @@ window.onload = function () {
         var refNow = new Date();
         refNow.setHours(0, 0, 0, 0);
         for (var key in todoList) {
-            if (todoList[key].date === "") {
+            if (todoList[key].date == "") {
                 continue;
             }
             var deadline = new Date(todoList[key].date);
             deadline.setHours(0, 0, 0, 0);
-            if ((deadline - refNow < 0) && (todoList[key].check === false)) {
+            if ((deadline - refNow < 0) && (todoList[key].check == false)) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML === '') {
+        if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
     };
@@ -108,17 +108,17 @@ window.onload = function () {
         var refNow = new Date();
         refNow.setHours(0, 0, 0, 0);
         for (var key in todoList) {
-            if (todoList[key].date === "") {
+            if (todoList[key].date == "") {
                 continue;
             }
             var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
             //alert(deadline - now);
-            if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (todoList[key].check === false)) {
+            if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (todoList[key].check == false)) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML === '') {
+        if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
     };
@@ -133,7 +133,7 @@ window.onload = function () {
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML === '') {
+        if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
     };
@@ -142,12 +142,12 @@ window.onload = function () {
         document.getElementById('Tasks').innerHTML = '';
 
         for (var key in todoList) {
-            if (todoList[key].check === false) {
+            if (todoList[key].check == false) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML === '') {
+        if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
     }
@@ -158,7 +158,6 @@ window.onload = function () {
         div.innerHTML = "<input type='checkbox' id='checkbox" + todoList[key].id + "'>" + todoList[key].todo + "<span  class='deletebtn' id='span" + todoList[key].id + "'>Delete</span>" + "<span  class='editbtn' id='edit" + todoList[key].id + "'>Edit</span>";
 
         document.getElementById('Tasks').appendChild(div);
-        //document.getElementById('span0').addEventListener("onclick", deleteItem);
         document.getElementById('span' + todoList[key].id).onclick = deleteItem;
         document.getElementById('checkbox' + todoList[key].id).onclick = checkItem;
         document.getElementById('edit' + todoList[key].id).onclick = editItem;
@@ -174,7 +173,6 @@ window.onload = function () {
     }
 
     function checkItem() {
-        //alert(this.checked);
         var str = this.id;
         var id = str.substring(8);
         var elem = document.getElementsByClassName('Task' + id);
@@ -182,7 +180,7 @@ window.onload = function () {
         el.parentNode.removeChild(el);
 
         for (var key in todoList) {
-            if (id === todoList[key].id) {
+            if (id == todoList[key].id) {
                 todoList[key].check = true;
                 break;
             }
@@ -199,7 +197,7 @@ window.onload = function () {
         el.parentNode.removeChild(el);
         var newDesc = prompt("Write new description", "write description here");
         for (var key in todoList) {
-            if (id === todoList[key].id) {
+            if (id == todoList[key].id) {
                 todoList[key].todo = newDesc;
                 break;
             }
@@ -216,7 +214,7 @@ window.onload = function () {
         el.parentNode.removeChild(el);
 
         for (var key in todoList) {
-            if (id === todoList[key].id) {
+            if (id == todoList[key].id) {
                 todoList.splice(key, 1);
                 break;
             }
