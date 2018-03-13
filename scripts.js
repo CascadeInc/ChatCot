@@ -1,7 +1,7 @@
 window.onload = function () {
 
     var todoList = [];
-    if (localStorage.getItem('todo') != undefined) {
+    if (localStorage.getItem('todo') !== undefined) {
         todoList = JSON.parse(localStorage.getItem('todo'));
         writeNoteDoneList();
     }
@@ -9,7 +9,7 @@ window.onload = function () {
 
     document.getElementById('addBtn').onclick = function () {
         var d = document.getElementById('descForm').value;
-        if (d != "") {
+        if (d !== "") {
             var temp = {};
             temp.todo = d;
             temp.check = false;
@@ -25,28 +25,28 @@ window.onload = function () {
             writeNoteDoneList();
             glId++;
         }
-    }
+    };
 
     document.getElementById('allList').onclick = function () {
         writeNoteDoneList();
-        if (document.getElementById('Tasks').innerHTML == '') {
+        if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
-    }
+    };
 
     document.getElementById('doneList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
 
         for (var key in todoList) {
-            if (todoList[key].check == true) {
+            if (todoList[key].check === true) {
                 writeDoneItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML == '') {
+        if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
-    }
+    };
 
     document.getElementById('todayList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
@@ -54,74 +54,74 @@ window.onload = function () {
         now.setHours(0, 0, 0, 0);
 
         for (var key in todoList) {
-            if ((todoList[key].date.localeCompare(now.toDateString()) == 0) && (todoList[key].check == false)) {
+            if ((todoList[key].date.localeCompare(now.toDateString()) === 0) && (todoList[key].check === false)) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML == '') {
+        if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
-    }
+    };
 
     document.getElementById('next7DayList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
 
         var refNow = new Date();
-        refNow.setHours(0, 0, 0, 0)
+        refNow.setHours(0, 0, 0, 0);
 
         for (var key in todoList) {
             var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
             //alert(deadline - now);
-            if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (todoList[key].check == false)) {
+            if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (todoList[key].check === false)) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML == '') {
+        if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
-    }
+    };
 
     document.getElementById('overdueList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
-        var refNow = new Date().setHours(0, 0, 0, 0);
-
+        var refNow = new Date();
+        refNow.setHours(0, 0, 0, 0);
         for (var key in todoList) {
-            if (todoList[key].date == "") {
+            if (todoList[key].date === "") {
                 continue;
             }
-            var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
-            //alert(deadline - now);
-            if ((deadline - refNow < 0) && (todoList[key].check == false)) {
+            var deadline = new Date(todoList[key].date);
+            deadline.setHours(0, 0, 0, 0);
+            if ((deadline - refNow < 0) && (todoList[key].check === false)) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML == '') {
+        if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
-    }
+    };
 
     document.getElementById('forgottenList').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
-        var refNow = new Date().setHours(0, 0, 0, 0);
-
+        var refNow = new Date();
+        refNow.setHours(0, 0, 0, 0);
         for (var key in todoList) {
-            if (todoList[key].date == "") {
+            if (todoList[key].date === "") {
                 continue;
             }
             var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
             //alert(deadline - now);
-            if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (todoList[key].check == false)) {
+            if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (todoList[key].check === false)) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML == '') {
+        if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
-    }
+    };
 
     document.getElementById('searchBtn').onclick = function () {
         document.getElementById('Tasks').innerHTML = '';
@@ -133,21 +133,21 @@ window.onload = function () {
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML == '') {
+        if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
-    }
+    };
 
     function writeNoteDoneList() {
         document.getElementById('Tasks').innerHTML = '';
 
         for (var key in todoList) {
-            if (todoList[key].check == false) {
+            if (todoList[key].check === false) {
                 writeItem(key);
             }
         }
 
-        if (document.getElementById('Tasks').innerHTML == '') {
+        if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
     }
@@ -182,7 +182,7 @@ window.onload = function () {
         el.parentNode.removeChild(el);
 
         for (var key in todoList) {
-            if (id == todoList[key].id) {
+            if (id === todoList[key].id) {
                 todoList[key].check = true;
                 break;
             }
@@ -199,7 +199,7 @@ window.onload = function () {
         el.parentNode.removeChild(el);
         var newDesc = prompt("Write new description", "write description here");
         for (var key in todoList) {
-            if (id == todoList[key].id) {
+            if (id === todoList[key].id) {
                 todoList[key].todo = newDesc;
                 break;
             }
@@ -216,7 +216,7 @@ window.onload = function () {
         el.parentNode.removeChild(el);
 
         for (var key in todoList) {
-            if (id == todoList[key].id) {
+            if (id === todoList[key].id) {
                 todoList.splice(key, 1);
                 break;
             }
@@ -232,4 +232,4 @@ window.onload = function () {
         div.innerHTML = "Oops,<br>Nothing in this list";
         document.getElementById('Tasks').appendChild(div);
     }
-}
+};
