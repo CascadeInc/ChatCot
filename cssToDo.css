@@ -22,8 +22,8 @@ body {
     padding-bottom: -10px;
     left: 250px;
     font-variant: small-caps;
-  letter-spacing: 5px;
-   text-shadow: 3px 3px 0px #4787f7,
+    letter-spacing: 5px;
+    text-shadow: 3px 3px 0px #4787f7,
     6px 6px 0px #063484;
     font-size: 80px;
 }
@@ -134,7 +134,7 @@ li {
     transition: 0.3s;
 }
 .menubtn:hover {
-  color: #0c409b;
+    color: #0c409b;
 }
 
 .deletebtn {
@@ -186,4 +186,4 @@ hr {
     height: 2px; /* Толщина линии */
     padding: 0;
     margin: 0;
-   }
+}
