@@ -1,144 +1,235 @@
-window.onload = function () {
+function add(array, description, dateString, id) {
+    if (description != "") {
+        var temp = {};
+        temp.todo = description;
+        temp.check = false;
+        temp.id = id;
+        var date = new Date(dateString);
+        if (isNaN(date.getTime()))
+            date = new Date();
+        date.setHours(0, 0, 0, 0);
+        temp.date = date.toDateString();
+        array[id] = temp;
+    }
+}
+
+function getDone(array) {
+    var result = [];
+    for (var i = 0; i < array.length; i++)
+        if (array[i].check === true)
+            result.push(array[i]);
+    return result;
+}
+
+function removeItem(array, id) {
+    for (var key in array) {
+        if (id == array[key].id) {
+            array.splice(key, 1);
+            break;
+        }
+    }
+}
+
+function changeDesc(array, id, desc) {
+    for (var key in array) {
+        if (id == array[key].id) {
+            array[key].todo = desc;
+            break;
+        }
+    }
+}
+
+function getSearchResults(array, desc) {
+    var result = [];
+    for (var key in array) {
+        if (array[key].todo.indexOf(desc) >= 0) {
+            result.push(array[key]);
+        }
+    }
+    return result;
+}
+
+function setChecked(array, id) {
+    for (var key in array) {
+        if (id == array[key].id) {
+            array[key].check = true;
+            break;
+        }
+    }
+}
+
+function getToday(array) {
+    var result = [];
+    var now = new Date();
+    now.setHours(0, 0, 0, 0);
+    for (var key in array) {
+        if ((array[key].date.localeCompare(now.toDateString()) == 0) && (array[key].check == false)) {
+            result.push(array[key])
+        }
+    }
+    return result;
+}
+
+function getWeek(array) {
+    var result = [];
+    var refNow = new Date();
+    refNow.setHours(0, 0, 0, 0);
+
+    for (var key in array) {
+        var deadline = new Date(array[key].date).setHours(0, 0, 0, 0);
+        if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (array[key].check == false)) {
+            result.push(array[key])
+        }
+    }
+    return result;
+}
+
+function getOverdue(array) {
+    var result = [];
+    var refNow = new Date();
+    refNow.setHours(0, 0, 0, 0);
+    for (var key in array) {
+        if (array[key].date == "") {
+            continue;
+        }
+        var deadline = new Date(array[key].date);
+        deadline.setHours(0, 0, 0, 0);
+        if ((deadline - refNow < 0) && (array[key].check == false)) {
+            result.push(array[key])
+        }
+    }
+    return result;
+}
+
+function getForgotten(array) {
+    var result = [];
+    var refNow = new Date();
+    refNow.setHours(0, 0, 0, 0);
+    for (var key in array) {
+        if (array[key].date == "") {
+            continue;
+        }
+        var deadline = new Date(array[key].date).setHours(0, 0, 0, 0);
+        if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (array[key].check == false)) {
+            result.push(key)
+        }
+    }
+    return result;
+}
+
+window.onload = start;
+
+function start() {
 
     var todoList = [];
     if (localStorage.getItem('todo') != undefined) {
         todoList = JSON.parse(localStorage.getItem('todo'));
-        writeNoteDoneList();
+        for (var i = 0; i < todoList.length; i++) {
+            if (todoList[i] === null) {
+                todoList.splice(i, 1);
+            }
+        }
+        writeNotDoneList();
     }
     var glId = todoList.length;
 
     document.getElementById('addBtn').onclick = function () {
-        var d = document.getElementById('descForm').value;
-        if (d != "") {
-            var temp = {};
-            temp.todo = d;
-            temp.check = false;
-            temp.id = glId;
-            d = document.getElementById("dateForm").value;
-            var date = new Date(d);
-            if (isNaN(date.getTime()))
-                date = new Date();
-            date.setHours(0, 0, 0, 0);
-            temp.date = date.toDateString();
-            todoList[glId] = temp;
-            localStorage.setItem('todo', JSON.stringify(todoList));
-            writeNoteDoneList();
-            glId++;
-        }
+        var descr = document.getElementById('descForm').value;
+        var dateStr = document.getElementById("dateForm").value;
+        add(todoList, descr, dateStr, glId);
+        writeNotDoneList();
+        localStorage.setItem('todo', JSON.stringify(todoList));
+        glId++;
     };
 
     document.getElementById('allList').onclick = function () {
-        writeNoteDoneList();
+        document.title = "ToDo List";
+        writeNotDoneList();
         if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
     };
 
-    document.getElementById('doneList').onclick = function () {
-        document.getElementById('Tasks').innerHTML = '';
+    document.getElementById('doneList').onclick = displayDone;
 
-        for (var key in todoList) {
-            if (todoList[key].check == true) {
-                writeDoneItem(key);
-            }
+    function displayDone() {
+        document.getElementById('Tasks').innerHTML = '';
+        document.title = "Done";
+        for (var todoItem in getDone(todoList))
+            writeDoneItem(todoItem);
+        if (document.getElementById('Tasks').innerHTML == '') {
+            writeEmptyMessage();
         }
+    }
+
+    document.getElementById('todayList').addEventListener("click", displayToday);
+
+    function displayToday() {
+        document.getElementById('Tasks').innerHTML = '';
+        document.title = "Today";
+        for (var item in getToday(todoList))
+            writeItem(item);
 
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
-    };
+    }
 
-    document.getElementById('todayList').onclick = function () {
+    document.getElementById('next7DayList').addEventListener("click", displayWeek);
+
+    function displayWeek() {
         document.getElementById('Tasks').innerHTML = '';
-        var now = new Date();
-        now.setHours(0, 0, 0, 0);
-
-        for (var key in todoList) {
-            if ((todoList[key].date.localeCompare(now.toDateString()) == 0) && (todoList[key].check == false)) {
-                writeItem(key);
-            }
-        }
+        document.title = "Week";
+        for (var item in getWeek(todoList))
+            writeItem(item);
 
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
-    };
+    }
 
-    document.getElementById('next7DayList').onclick = function () {
+    document.getElementById('overdueList').addEventListener("click", displayOverdue);
+
+    function displayOverdue() {
         document.getElementById('Tasks').innerHTML = '';
-
-        var refNow = new Date();
-        refNow.setHours(0, 0, 0, 0);
-
-        for (var key in todoList) {
-            var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
-            //alert(deadline - now);
-            if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (todoList[key].check == false)) {
-                writeItem(key);
-            }
-        }
+        document.title = "Overdue";
+        for (var item in getOverdue(todoList))
+            writeItem(item);
 
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
-    };
+    }
 
-    document.getElementById('overdueList').onclick = function () {
+    document.getElementById('forgottenList').addEventListener("click", displayForgotten);
+
+    function displayForgotten() {
         document.getElementById('Tasks').innerHTML = '';
-        var refNow = new Date();
-        refNow.setHours(0, 0, 0, 0);
-        for (var key in todoList) {
-            if (todoList[key].date == "") {
-                continue;
-            }
-            var deadline = new Date(todoList[key].date);
-            deadline.setHours(0, 0, 0, 0);
-            if ((deadline - refNow < 0) && (todoList[key].check == false)) {
-                writeItem(key);
-            }
-        }
+        document.title = "Forgotten";
 
+        for (var item in getForgotten(todoList))
+            writeItem(item);
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
-    };
+    }
 
-    document.getElementById('forgottenList').onclick = function () {
+    document.getElementById('searchBtn').addEventListener("click", search);
+
+    function search() {
         document.getElementById('Tasks').innerHTML = '';
-        var refNow = new Date();
-        refNow.setHours(0, 0, 0, 0);
-        for (var key in todoList) {
-            if (todoList[key].date == "") {
-                continue;
-            }
-            var deadline = new Date(todoList[key].date).setHours(0, 0, 0, 0);
-            //alert(deadline - now);
-            if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (todoList[key].check == false)) {
-                writeItem(key);
-            }
-        }
-
-        if (document.getElementById('Tasks').innerHTML == '') {
-            writeEmptyMessage();
-        }
-    };
-
-    document.getElementById('searchBtn').onclick = function () {
-        document.getElementById('Tasks').innerHTML = '';
+        document.title = "Search results";
         var searchName = document.getElementById("searchForm").value;
 
-        for (var key in todoList) {
-            if (todoList[key].todo.indexOf(searchName) >= 0) {
-                writeItem(key);
-            }
-        }
+        for (var item in getSearchResults(todoList, searchName))
+            writeItem(item);
 
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
-    };
+    }
 
-    function writeNoteDoneList() {
+    function writeNotDoneList() {
         document.getElementById('Tasks').innerHTML = '';
 
         for (var key in todoList) {
@@ -179,12 +270,7 @@ window.onload = function () {
         var el = elem[0];
         el.parentNode.removeChild(el);
 
-        for (var key in todoList) {
-            if (id == todoList[key].id) {
-                todoList[key].check = true;
-                break;
-            }
-        }
+        setChecked(todoList, id);
 
         localStorage.setItem('todo', JSON.stringify(todoList));
     }
@@ -196,14 +282,9 @@ window.onload = function () {
         var el = elem[0];
         el.parentNode.removeChild(el);
         var newDesc = prompt("Write new description", "write description here");
-        for (var key in todoList) {
-            if (id == todoList[key].id) {
-                todoList[key].todo = newDesc;
-                break;
-            }
-        }
+        changeDesc(todoList, id, newDesc);
         localStorage.setItem('todo', JSON.stringify(todoList));
-        writeNoteDoneList();
+        writeNotDoneList();
     }
 
     function deleteItem() {
@@ -212,16 +293,9 @@ window.onload = function () {
         var elem = document.getElementsByClassName('Task' + id);
         var el = elem[0];
         el.parentNode.removeChild(el);
-
-        for (var key in todoList) {
-            if (id == todoList[key].id) {
-                todoList.splice(key, 1);
-                break;
-            }
-        }
-
+        removeItem(todoList, id);
         localStorage.setItem('todo', JSON.stringify(todoList));
-        writeNoteDoneList();
+        writeNotDoneList();
     }
 
     function writeEmptyMessage() {
@@ -230,4 +304,4 @@ window.onload = function () {
         div.innerHTML = "Oops,<br>Nothing in this list";
         document.getElementById('Tasks').appendChild(div);
     }
-};
+}
