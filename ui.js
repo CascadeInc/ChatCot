@@ -1,127 +1,9 @@
-function add(array, description, dateString, id) {
-    if (description != "") {
-        var temp = {};
-        temp.todo = description;
-        temp.check = false;
-        temp.id = id;
-        var date = new Date(dateString);
-        if (isNaN(date.getTime()))
-            date = new Date();
-        date.setHours(0, 0, 0, 0);
-        temp.date = date.toDateString();
-        array[id] = temp;
-    }
-}
-
-function getDone(array) {
-    var result = [];
-    for (var i = 0; i < array.length; i++)
-        if (array[i].check === true)
-            result.push(array[i]);
-    return result;
-}
-
-function removeItem(array, id) {
-    for (var key in array) {
-        if (id == array[key].id) {
-            array.splice(key, 1);
-            break;
-        }
-    }
-}
-
-function changeDesc(array, id, desc) {
-    for (var key in array) {
-        if (id == array[key].id) {
-            array[key].todo = desc;
-            break;
-        }
-    }
-}
-
-function getSearchResults(array, desc) {
-    var result = [];
-    for (var key in array) {
-        if (array[key].todo.indexOf(desc) >= 0) {
-            result.push(array[key]);
-        }
-    }
-    return result;
-}
-
-function setChecked(array, id) {
-    for (var key in array) {
-        if (id == array[key].id) {
-            array[key].check = true;
-            break;
-        }
-    }
-}
-
-function getToday(array) {
-    var result = [];
-    var now = new Date();
-    now.setHours(0, 0, 0, 0);
-    for (var key in array) {
-        if ((array[key].date.localeCompare(now.toDateString()) == 0) && (array[key].check == false)) {
-            result.push(array[key])
-        }
-    }
-    return result;
-}
-
-function getWeek(array) {
-    var result = [];
-    var refNow = new Date();
-    refNow.setHours(0, 0, 0, 0);
-
-    for (var key in array) {
-        var deadline = new Date(array[key].date).setHours(0, 0, 0, 0);
-        if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (array[key].check == false)) {
-            result.push(array[key])
-        }
-    }
-    return result;
-}
-
-function getOverdue(array) {
-    var result = [];
-    var refNow = new Date();
-    refNow.setHours(0, 0, 0, 0);
-    for (var key in array) {
-        if (array[key].date == "") {
-            continue;
-        }
-        var deadline = new Date(array[key].date);
-        deadline.setHours(0, 0, 0, 0);
-        if ((deadline - refNow < 0) && (array[key].check == false)) {
-            result.push(array[key])
-        }
-    }
-    return result;
-}
-
-function getForgotten(array) {
-    var result = [];
-    var refNow = new Date();
-    refNow.setHours(0, 0, 0, 0);
-    for (var key in array) {
-        if (array[key].date == "") {
-            continue;
-        }
-        var deadline = new Date(array[key].date).setHours(0, 0, 0, 0);
-        if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (array[key].check == false)) {
-            result.push(key)
-        }
-    }
-    return result;
-}
-
 window.onload = start;
 
 function start() {
 
     var todoList = [];
+    localStorage.clear();
     if (localStorage.getItem('todo') != undefined) {
         todoList = JSON.parse(localStorage.getItem('todo'));
         for (var i = 0; i < todoList.length; i++) {
@@ -131,7 +13,16 @@ function start() {
         }
         writeNotDoneList();
     }
-    var glId = todoList.length;
+
+    var glId = getmaxId(todoList);
+    function getmaxId(array){
+        var max = 0;
+        array.forEach(function (item) {
+            if (item.id>max) max = item.id;
+        });
+        if (max == 0) return max
+        return max+1;
+    }
 
     document.getElementById('addBtn').onclick = function () {
         var descr = document.getElementById('descForm').value;
@@ -155,8 +46,10 @@ function start() {
     function displayDone() {
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Done";
-        for (var todoItem in getDone(todoList))
-            writeDoneItem(todoItem);
+        getDone(todoList).forEach(function (item) {
+            writeDoneItem(item);
+        });
+
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
@@ -167,8 +60,9 @@ function start() {
     function displayToday() {
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Today";
-        for (var item in getToday(todoList))
+        getToday(todoList).forEach(function (item) {
             writeItem(item);
+        });
 
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
@@ -180,8 +74,9 @@ function start() {
     function displayWeek() {
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Week";
-        for (var item in getWeek(todoList))
+        getWeek(todoList).forEach(function (item) {
             writeItem(item);
+        });
 
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
@@ -193,8 +88,9 @@ function start() {
     function displayOverdue() {
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Overdue";
-        for (var item in getOverdue(todoList))
+        getOverdue(todoList).forEach(function (item) {
             writeItem(item);
+        });
 
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
@@ -206,9 +102,10 @@ function start() {
     function displayForgotten() {
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Forgotten";
-
-        for (var item in getForgotten(todoList))
+        getForgotten(todoList).forEach(function (item) {
             writeItem(item);
+        });
+
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
@@ -221,8 +118,9 @@ function start() {
         document.title = "Search results";
         var searchName = document.getElementById("searchForm").value;
 
-        for (var item in getSearchResults(todoList, searchName))
+        getSearchResults(todoList, searchName).forEach(function (elem) {
             writeItem(item);
+        });
 
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
@@ -231,36 +129,33 @@ function start() {
 
     function writeNotDoneList() {
         document.getElementById('Tasks').innerHTML = '';
-
-        for (var key in todoList) {
-            if (todoList[key].check == false) {
-                writeItem(key);
-            }
-        }
+        getNotDone(todoList).forEach(function (elem) {
+            writeItem(elem)
+        });
 
         if (document.getElementById('Tasks').innerHTML == '') {
             writeEmptyMessage();
         }
     }
 
-    function writeItem(key) {
+    function writeItem(item) {
         var div = document.createElement('div');
-        div.className = "Task" + todoList[key].id + " Task";
-        div.innerHTML = "<input type='checkbox' id='checkbox" + todoList[key].id + "'>" + todoList[key].todo + "<span  class='deletebtn' id='span" + todoList[key].id + "'>Delete</span>" + "<span  class='editbtn' id='edit" + todoList[key].id + "'>Edit</span>";
+        div.className = "Task" + item.id + " Task";
+        div.innerHTML = "<input type='checkbox' id='checkbox" + item.id + "'>" + item.todo + "<span  class='deletebtn' id='span" + item.id + "'>Delete</span>" + "<span  class='editbtn' id='edit" + item.id + "'>Edit</span>";
 
         document.getElementById('Tasks').appendChild(div);
-        document.getElementById('span' + todoList[key].id).onclick = deleteItem;
-        document.getElementById('checkbox' + todoList[key].id).onclick = checkItem;
-        document.getElementById('edit' + todoList[key].id).onclick = editItem;
+        document.getElementById('span' + item.id).onclick = deleteItem;
+        document.getElementById('checkbox' + item.id).onclick = checkItem;
+        document.getElementById('edit' + item.id).onclick = editItem;
     }
 
-    function writeDoneItem(key) {
+    function writeDoneItem(item) {
         var div = document.createElement('div');
-        div.className = "Task" + todoList[key].id + " Task";
-        div.innerHTML = todoList[key].todo + "<span  class='deletebtn' id='span" + todoList[key].id + "'>Delete</span>";
+        div.className = "Task" + item.id + " Task";
+        div.innerHTML = item.todo + "<span  class='deletebtn' id='span" + item.id + "'>Delete</span>";
 
         document.getElementById('Tasks').appendChild(div);
-        document.getElementById('span' + todoList[key].id).onclick = deleteItem;
+        document.getElementById('span' + item.id).onclick = deleteItem;
     }
 
     function checkItem() {

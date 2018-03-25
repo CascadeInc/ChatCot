@@ -1,0 +1,9 @@
+{
+  "name": "ToDo-List",
+  "version": "0.0.1",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^5.0.5",
+    "should": "^13.2.1"
+  }
+}
