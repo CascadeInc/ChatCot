@@ -3,7 +3,6 @@ window.onload = start;
 function start() {
 
     var todoList = [];
-    localStorage.clear();
     if (localStorage.getItem('todo') != undefined) {
         todoList = JSON.parse(localStorage.getItem('todo'));
         for (var i = 0; i < todoList.length; i++) {
