@@ -1,5 +1,8 @@
 package by.cascade.chatcot.command;
 
+/**
+ * enum with all commands
+ */
 public enum CommandConstants {
 
     GREETING_STANDARD_COMMAND("standard greetings", 0),
@@ -16,16 +19,28 @@ public enum CommandConstants {
     private final String command;
     private final int arguments;
 
+    /**
+     * creating command
+     * @param command - command
+     * @param arguments - count of arguments
+     */
     CommandConstants(String command, int arguments) {
         this.command = command;
         this.arguments = arguments;
     }
 
-
+    /**
+     * getting command
+     * @return - command
+     */
     public final String getCommand() {
         return command;
     }
 
+    /**
+     * getting count of arguments
+     * @return - count of arguments
+     */
     public final int getArguments() {
         return arguments;
     }
