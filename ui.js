@@ -13,15 +13,7 @@ function start() {
         writeNotDoneList();
     }
 
-    var glId = getmaxId(todoList);
-    function getmaxId(array){
-        var max = 0;
-        array.forEach(function (item) {
-            if (item.id>max) max = item.id;
-        });
-        if (max == 0) return max
-        return max+1;
-    }
+    var glId = getStartingId(todoList);
 
     document.getElementById('addBtn').onclick = function () {
         var descr = document.getElementById('descForm').value;

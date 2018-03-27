@@ -116,3 +116,12 @@ getForgotten = function (array) {
     });
     return result;
 };
+
+getStartingId = function (array) {
+    var max = 0;
+    array.forEach(function (item) {
+        if (item.id > max) max = item.id;
+    });
+    if (max == 0) return max;
+    return max + 1;
+};
