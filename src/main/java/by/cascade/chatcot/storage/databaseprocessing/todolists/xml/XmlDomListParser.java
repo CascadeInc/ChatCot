@@ -31,7 +31,7 @@ public class XmlDomListParser implements ListParsable {
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
             doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("phrase");
+            NodeList nList = doc.getElementsByTagName("tasks");
             ListModel[] people;
             if (nList.getLength() > 0) {
                 people = new ListModel[nList.getLength()];

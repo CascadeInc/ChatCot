@@ -97,8 +97,10 @@ public class ListModelXmlAdapter implements ListAdapter {
      */
     public void addInEnd(ListModel phrase) {
         LOGGER.info("adding in end");
-        if (parser.parseFromXML(path) != null) {
-            this.add(phrase, parser.parseFromXML(path).length);
+        ListModel[] models = parser.parseFromXML(path);
+        if (models != null) {
+            LOGGER.info("length = " + models.length);
+            this.add(phrase, models.length);
         } else {
             this.add(phrase, 0);
         }
