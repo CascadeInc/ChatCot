@@ -1,8 +1,13 @@
 package by.cascade.chatcot.storage.databaseprocessing.util;
 
+import by.cascade.chatcot.storage.databaseprocessing.DataBaseException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 
 abstract public class SqlUtil {
+    private final static Logger LOGGER = LogManager.getLogger(SqlUtil.class);
     static Connection connection;
 
     /**
@@ -10,14 +15,18 @@ abstract public class SqlUtil {
      * @param sqlRequest - SQL request
      * @return - result of request
      */
-    public ResultSet exec(String sqlRequest) {
+    public ResultSet exec(String sqlRequest) throws DataBaseException {
         try {
+            if (connection.isClosed()) {
+                throw new DataBaseException("closed connection");
+            }
             Statement statement = connection.createStatement();
             statement.closeOnCompletion();
             return statement.executeQuery(sqlRequest);
         }
         catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.fatal("can't execute: \"" + sqlRequest + "\"");
+            LOGGER.catching(e);
         }
         return null;
     }
@@ -27,20 +36,27 @@ abstract public class SqlUtil {
      * @param sqlRequest - SQL request for executing
      * @return - nothing
      */
-    public int execUpdate(String sqlRequest) {
+    public int execUpdate(String sqlRequest) throws DataBaseException {
         try {
+            if (connection.isClosed()) {
+                throw new DataBaseException("closed connection");
+            }
             Statement statement = connection.createStatement();
             statement.closeOnCompletion();
             return statement.executeUpdate(sqlRequest);
         }
         catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.fatal("can't execute: \"" + sqlRequest + "\"");
+            LOGGER.catching(e);
         }
         return -1;
     }
 
-    public ResultSet execPrepare(String sqlRequest, String... strings) {
+    public ResultSet execPrepare(String sqlRequest, String... strings) throws DataBaseException {
         try {
+            if (connection.isClosed()) {
+                throw new DataBaseException("closed connection");
+            }
             connection.setAutoCommit(false);
             PreparedStatement statement = connection.prepareStatement(sqlRequest);
             statement.closeOnCompletion();
@@ -52,7 +68,13 @@ abstract public class SqlUtil {
             return statement.executeQuery();
         }
         catch (SQLException e) {
-            e.printStackTrace();
+            StringBuilder builder = new StringBuilder();
+            for (String s : strings) {
+                builder.append(s);
+                builder.append("; ");
+            }
+            LOGGER.fatal("can't execute prepare statement = \"" + sqlRequest + "\" with args = [" + builder.toString() + "]");
+            LOGGER.catching(e);
         }
         return null;
     }

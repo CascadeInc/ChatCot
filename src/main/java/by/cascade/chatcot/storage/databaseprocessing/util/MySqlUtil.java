@@ -1,12 +1,12 @@
 package by.cascade.chatcot.storage.databaseprocessing.util;
 
 import by.cascade.chatcot.storage.ConnectorException;
+import by.cascade.chatcot.storage.databaseprocessing.DataBaseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.sql.*;
-import java.util.Properties;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Class for working with DataBase (low level)
@@ -14,12 +14,7 @@ import java.util.Properties;
 public class MySqlUtil extends SqlUtil {
     private static final Logger LOGGER = LogManager.getLogger(MySqlUtil.class);
 
-    // URL of connection on MySQL server    CHANGE TO YOUR
-    private static final String URL = "jdbc:mysql://localhost:3306/";
-    private static final String PATH = "db.properties";
-
-
-    public MySqlUtil() {
+    public MySqlUtil() throws DataBaseException {
         try {
             connection = ConnectionPool.getInstance().getConnection();
             if (connection != null) {
@@ -30,8 +25,7 @@ public class MySqlUtil extends SqlUtil {
             }
         }
         catch (SQLException e) {
-            LOGGER.error("Connection failed - " + e.getMessage());
-            throw new RuntimeException(e);
+            throw new DataBaseException("can't getting connection", e);
         }
     }
 
@@ -41,13 +35,13 @@ public class MySqlUtil extends SqlUtil {
      * @return - result of request
      */
     @Override
-    public ResultSet exec(String sqlRequest) {
+    public ResultSet exec(String sqlRequest) throws DataBaseException {
         LOGGER.info("executing MySQL query = \"" + sqlRequest + "\"....");
         return super.exec(sqlRequest);
     }
 
     @Override
-    public ResultSet execPrepare(String sqlRequest, String... strings) {
+    public ResultSet execPrepare(String sqlRequest, String... strings) throws DataBaseException {
         LOGGER.info("executing MySQL prepare query = \"" + sqlRequest + "\"....");
         return super.execPrepare(sqlRequest, strings);
     }
@@ -58,7 +52,7 @@ public class MySqlUtil extends SqlUtil {
      * @return - nothing
      */
     @Override
-    public int execUpdate(String sqlRequest) {
+    public int execUpdate(String sqlRequest) throws DataBaseException {
         LOGGER.info("executing MySQL query = \"" + sqlRequest + "\"....");
         return super.execUpdate(sqlRequest);
     }
@@ -66,15 +60,26 @@ public class MySqlUtil extends SqlUtil {
     /**
      * close connection with DataBase
      */
-    public void shutdown() {
+    public void shutdown() throws DataBaseException {
         try {
-            LOGGER.info("closing MySQL connection to DataBase....");
-            connection.close();
             LOGGER.info("MySQL connection was closed");
             ConnectionPool.getInstance().releaseConnection((ProxyConnection) connection);
         } catch (SQLException e) {
-            e.printStackTrace();
-            LOGGER.error("can't close MySQL connection to DataBase");
+            throw new DataBaseException("can't close connection", e);
         }
+    }
+
+    public boolean isOpen() throws ConnectorException {
+        try {
+            return connection.isClosed();
+        }
+        catch (SQLException e) {
+            throw new ConnectorException("undefined status of connection", e);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return connection.toString();
     }
 }

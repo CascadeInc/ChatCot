@@ -1,5 +1,6 @@
 package by.cascade.chatcot.storage.databaseprocessing.util;
 
+import by.cascade.chatcot.storage.databaseprocessing.DataBaseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +36,7 @@ public class SQLiteUtil extends SqlUtil {
      * @return - result of request
      */
     @Override
-    public ResultSet exec(String sqlRequest) {
+    public ResultSet exec(String sqlRequest) throws DataBaseException {
         LOGGER.info("executing SQLite query = \"" + sqlRequest + "\"....");
         return super.exec(sqlRequest);
     }
@@ -46,7 +47,7 @@ public class SQLiteUtil extends SqlUtil {
      * @return - nothing
      */
     @Override
-    public int execUpdate(String sqlRequest) {
+    public int execUpdate(String sqlRequest) throws DataBaseException {
         LOGGER.info("executing SQLite query = \"" + sqlRequest + "\"....");
         return super.execUpdate(sqlRequest);
     }

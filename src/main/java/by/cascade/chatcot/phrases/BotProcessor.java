@@ -1,7 +1,10 @@
 package by.cascade.chatcot.phrases;
 
+import by.cascade.chatcot.storage.ConnectorException;
+import by.cascade.chatcot.storage.databaseprocessing.DataBaseException;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseAdapter;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseModel;
+import by.cascade.chatcot.storage.databaseprocessing.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -115,7 +118,7 @@ public class BotProcessor {
         }
     }
 
-    public void loadPhrases() {
+    public void loadPhrases() throws DataBaseException {
         List<PhraseModel> list = adapter.listPhrases();
         for (PhraseModel entity : list) {
             if (types.contains(entity.getType())) {
@@ -124,135 +127,123 @@ public class BotProcessor {
         }
     }
 
-    public void initialize() {
+    public void initialize() throws DataBaseException {
         adapter.create();
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hi");
-        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hello");
-        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hola");
-        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hey");
-        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hey man");
-        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "how's it going");
-        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "nice to meet you");
-        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "eou look great today");
-        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "look at you, you're so smart");
+        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hi", 0);
+        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hello", 0);
+        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hola", 0);
+        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hey", 0);
+        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "hey man", 0);
+        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "how's it going", 0);
+        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "nice to meet you", 0);
+        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "eou look great today", 0);
+        adapter.addPhrase(GREETING_STANDARD_COMMAND.getCommand(), "look at you, you're so smart", 0);
 
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hi");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hello");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hey");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "meow");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "greetings");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "i'm glad we can talk a bit");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hi, nice to meet you");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "Meow!!!");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "good afternoon");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hi! Let's talk a bit");
-        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hello, we can talk about stuff");
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hi", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hello", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hey", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "meow", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "greetings", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "i'm glad we can talk a bit", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hi, nice to meet you", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "Meow!!!", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "good afternoon", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hi! Let's talk a bit", 0);
+        adapter.addPhrase(GREETING_SPECIAL_COMMAND.getCommand(), "hello, we can talk about stuff", 0);
 
-        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how are you?");
-        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how r you?");
-        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how r u?");
-        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how are u?");
-        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "what's new?");
-        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "what's going on?");
-        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how's life?");
-        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "what's up?");
+        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how are you?", 0);
+        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how r you?", 0);
+        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how r u?", 0);
+        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how are u?", 0);
+        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "what's new?", 0);
+        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "what's going on?", 0);
+        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "how's life?", 0);
+        adapter.addPhrase(GREETING_QUESTION_COMMAND.getCommand(), "what's up?", 0);
 
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "good");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "doing well");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "fine");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "great");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "not good");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "I dunno :D");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "you tell me");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "still excellent");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "fine, trying to find another job");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "not good. Have you seen those milk prices? Cats will be angry");
-        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "not bad, just live in my pretty cat's life");
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "good", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "doing well", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "fine", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "great", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "not good", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "I dunno :D", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "you tell me", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "still excellent", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "fine, trying to find another job", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "not good. Have you seen those milk prices? Cats will be angry", 0);
+        adapter.addPhrase(GREETING_ANSWER_COMMAND.getCommand(), "not bad, just live in my pretty cat's life", 0);
 
-        adapter.addPhrase(YES_COMMAND.getCommand(), "yes");
-        adapter.addPhrase(YES_COMMAND.getCommand(), "speak");
-        adapter.addPhrase(YES_COMMAND.getCommand(), "talk");
-        adapter.addPhrase(YES_COMMAND.getCommand(), "i wanna speak, now");
-        adapter.addPhrase(YES_COMMAND.getCommand(), "talk to me, please");
-        adapter.addPhrase(YES_COMMAND.getCommand(), "please");
-        adapter.addPhrase(YES_COMMAND.getCommand(), "you");
-        adapter.addPhrase(YES_COMMAND.getCommand(), "go away");
-        adapter.addPhrase(YES_COMMAND.getCommand(), "stupid");
+        adapter.addPhrase(YES_COMMAND.getCommand(), "yes", 0);
+        adapter.addPhrase(YES_COMMAND.getCommand(), "speak", 0);
+        adapter.addPhrase(YES_COMMAND.getCommand(), "talk", 0);
+        adapter.addPhrase(YES_COMMAND.getCommand(), "i wanna speak, now", 0);
+        adapter.addPhrase(YES_COMMAND.getCommand(), "talk to me, please", 0);
+        adapter.addPhrase(YES_COMMAND.getCommand(), "please", 0);
+        adapter.addPhrase(YES_COMMAND.getCommand(), "you", 0);
+        adapter.addPhrase(YES_COMMAND.getCommand(), "go away", 0);
+        adapter.addPhrase(YES_COMMAND.getCommand(), "stupid", 0);
 
-        adapter.addPhrase(NO_COMMAND.getCommand(), "no");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "NO");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "NO!!!!");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "Please");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "c'mon");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "stop it");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "i don't wanna be chatcot anymore");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "can i talk to you later");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "i really tired");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "give me a brake, man");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "we don't speak anymore");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "chatCot Inc is closed today, bye");
-        adapter.addPhrase(NO_COMMAND.getCommand(), "i don't speak English");
+        adapter.addPhrase(NO_COMMAND.getCommand(), "no", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "NO", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "NO!!!!", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "Please", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "c'mon", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "stop it", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "i don't wanna be chatcot anymore", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "can i talk to you later", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "i really tired", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "give me a brake, man", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "we don't speak anymore", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "chatCot Inc is closed today, bye", 0);
+        adapter.addPhrase(NO_COMMAND.getCommand(), "i don't speak English", 0);
 
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "can't speak now, sorry :(", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "no, i don't think so", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "please, repeat", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "I don't get it", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "I'm really trying, but I can understand a word!", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "Not this again", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "what? I don't think so", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "let's not start this topic again", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "I think, I'm not a real cat", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "I can't imagene you said this again", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "you're funny :)", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "i don't think so", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "It's wonderful idea", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "look! just behind you!", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "2X2=5", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "Ich verstehe dich nicht", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "can't work in this conditions", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "please, shut up", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "you're bad", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "Tu enim operor non intellego", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "oh my god", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "i believe i can fly", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "Nie rozumiem cie", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "repeat yourself", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "____ i believe i can touch the sky", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "you could ", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "stop talking and go to work", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "010001 010101010101 0101010101010 0110 101010100 0101010 010101", 0);
+        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "(i'm unavailable right now)", 0);
 
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "can't speak now, sorry :(");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "no, i don't think so");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "please, repeat");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "I don't get it");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "I'm really trying, but I can understand a word!");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "Not this again");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "what? I don't think so");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "let's not start this topic again");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "I think, I'm not a real cat");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "I can't imagene you said this again");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "you're funny :)");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "i don't think so");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "It's wonderful idea");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "look! just behind you!");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "2X2=5");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "Ich verstehe dich nicht");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "can't work in this conditions");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "please, shut up");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "you're bad");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "Tu enim operor non intellego");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "oh my god");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "i believe i can fly");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "Nie rozumiem cie");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "repeat yourself");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "____ i believe i can touch the sky");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "you could ");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "stop talking and go to work");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "010001 010101010101 0101010101010 0110 101010100 0101010 010101");
-        adapter.addPhrase(DEFAULT_COMMAND.getCommand(), "(i'm unavailable right now)");
+        adapter.addPhrase(INITIALIZE_COMMAND.getCommand(), "init", 0);
 
-        adapter.addPhrase(INITIALIZE_COMMAND.getCommand(), "init");
+        adapter.addPhrase(FILTER_COMMAND.getCommand(), "filter since {} until {}", 0);
 
-        adapter.addPhrase(FILTER_COMMAND.getCommand(), "filter since {} until {}");
+        adapter.addPhrase(FILTER_COMMAND_BY_CHECK.getCommand(), "filter check {}", 0);
 
-        adapter.addPhrase(ADDING_COMMAND.getCommand(), "add {} {}");
+        adapter.addPhrase(ADDING_COMMAND.getCommand(), "add {} {}", 0);
 
     }
 
-    /**
-     * checking contains string into phrases
-     * @param in - input string for checking
-     * @param str - storage of phrases
-     * @return true - if str contains in
-     *         false - if str don't contains in
-     */
-    public boolean contains(String in, String[] str){
-        boolean match = false;
-        for (String aStr : str) {
-            if (aStr.equals(in)) {
-                match = true;
-            }
+    public void create() {
+        try {
+            adapter.create();
         }
-        return match;
+        catch (DataBaseException e) {
+            LOGGER.catching(e);
+        }
     }
 
     /**
@@ -260,22 +251,56 @@ public class BotProcessor {
      * @param quote - string from chat window
      * @return answer of Bot
      */
-    public String check(String quote) {
+    public String check(String quote) throws DataBaseException {
         LOGGER.info("checking in storage quote = \"" + quote + "\"");
         return adapter.findPhrase(quote);
     }
 
-    public String save(String type, String quote) {
+    /**
+     * saving quote in storage
+     * @param type - type of quote
+     * @param quote - quote for save
+     * @return - result of saving
+     */
+    public String save(String type, String quote, int owner) throws DataBaseException {
         LOGGER.info("adding in storage: (type = \"" + type + "\"; quote = \"" + quote + "\")");
-        adapter.addPhrase(type, quote);
+        if (owner == -1) {
+            return "NOT ENOUGH ORDERS TO SAVE";
+        }
+        adapter.addPhrase(type, quote, owner);
         return "phrase was successfully added: (type = \"" + type + "\"; phrase = \"" + quote + "\");";
     }
 
-    public void shutdown() {
-        this.adapter.shutdown();
+    public void open() {
+        adapter.refresh();
     }
 
-    public String getRandom(String type) {
+    public void close() {
+        try {
+            this.adapter.shutdown();
+        } catch (DataBaseException e) {
+            LOGGER.catching(e);
+        }
+    }
+
+    /**
+     * close all connections for system exit
+     */
+    public void shutdown() throws DataBaseException {
+        this.adapter.shutdown();
+        try {
+            ConnectionPool.getInstance().destroy();
+        } catch (ConnectorException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * getting random phrase with a input type
+     * @param type - type of phrase
+     * @return - random phrase
+     */
+    public String getRandom(String type) throws DataBaseException {
         LinkedList<PhraseModel> list = this.adapter.findType(type);
         Random random = new Random();
         int index = random.nextInt(list.size() - 1);

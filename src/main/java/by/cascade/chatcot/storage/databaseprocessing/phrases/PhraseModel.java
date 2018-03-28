@@ -10,15 +10,17 @@ public class PhraseModel {
     private int id;
     private String type;
     private String phrase;
+    private int owner;
 
-    public PhraseModel(int id, String type, String phrase) {
+    public PhraseModel(int id, String type, String phrase, int owner) {
         this.id = id;
         this.type = type;
         this.phrase = phrase;
+        this.owner = owner;
     }
 
-    public PhraseModel(String type, String phrase) {
-        this(0, type, phrase);
+    public PhraseModel(String type, String phrase, int owner) {
+        this(0, type, phrase, owner);
     }
 
     public int getId() {
@@ -45,18 +47,21 @@ public class PhraseModel {
         this.phrase = phrase;
     }
 
+    public int getOwner() {
+        return owner;
+    }
+
+    public void setOwner(int owner) {
+        this.owner = owner;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         PhraseModel that = (PhraseModel) o;
-
-        if (id != that.id) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (phrase != null ? !phrase.equals(that.phrase) : that.phrase != null) return false;
-
-        return true;
+        return id == that.id && (type != null ? type.equals(that.type) : that.type == null) && (phrase != null ? phrase.equals(that.phrase) : that.phrase == null) && (owner == that.owner);
     }
 
     @Override

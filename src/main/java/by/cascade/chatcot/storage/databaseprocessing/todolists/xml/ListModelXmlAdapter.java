@@ -260,26 +260,50 @@ public class ListModelXmlAdapter implements ListAdapter {
 
 
     @Override
-    public void addTask(String text, String description, int user) {
+    public void addTask(String text, String description, int owner) {
         LOGGER.info("adding new task: \"" + text + "\"");
-        addInEnd(new ListModel(0, new Date(), text, description, user));
+        addInEnd(new ListModel(0, new Date(), text, description, owner, false));
     }
 
     @Override
-    public LinkedList<ListModel> listTaskes() {
+    public LinkedList<ListModel> listTaskes(int owner) {
         LOGGER.info("getting list of tasks");
-        return getList();
+        LinkedList<ListModel> list = new LinkedList<>();
+        ListModel task;
+        int index = 0;
+        do {
+            task = parser.parseFromXML(path, index++);
+            if (task != null && task.getOwner() == owner) {
+                list.add(task);
+            }
+        } while (task != null);
+        return list;
     }
 
     @Override
-    public LinkedList<ListModel> filterTaskes(Date since, Date until) {
+    public LinkedList<ListModel> filterTaskes(Date since, Date until, int owner) {
         LOGGER.info("getting filtered tasks");
         LinkedList<ListModel> list = new LinkedList<>();
         ListModel task;
         int index = 0;
         do {
             task = parser.parseFromXML(path, index++);
-            if (task != null && task.getDate().after(since) && task.getDate().before(until)) {
+            if (task != null && task.getDate().after(since) && task.getDate().before(until) && task.getOwner() == owner) {
+                list.add(task);
+            }
+        } while (task != null);
+        return list;
+    }
+
+    @Override
+    public LinkedList<ListModel> filterTaskesByCheck(Boolean check, int owner) {
+        LOGGER.info("getting filtered tasks by check");
+        LinkedList<ListModel> list = new LinkedList<>();
+        ListModel task;
+        int index = 0;
+        do {
+            task = parser.parseFromXML(path, index++);
+            if (task != null && task.getCheck() == check && task.getOwner() == owner) {
                 list.add(task);
             }
         } while (task != null);
@@ -310,7 +334,7 @@ public class ListModelXmlAdapter implements ListAdapter {
     @Override
     public LinkedList<ListModel> findTasks() {
         LOGGER.info("find tasks");
-        return listTaskes();
+        return listTaskes(0);
     }
 
     /**

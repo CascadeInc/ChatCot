@@ -13,6 +13,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * singleton for getting connections with DataBase
+ */
 public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
     private static ConnectionPool instance;
@@ -20,8 +23,10 @@ public class ConnectionPool {
     private static AtomicBoolean isCreated = new AtomicBoolean(false);
     private static final int COUNT_CONNECTIONS = 20;
     private static final String DB_PROPERTIES = "db.properties";
+    private ConnectionCreator connectionCreator;
 
     private ArrayDeque<Connection> connections;
+    private Lock lock = new ReentrantLock();
 
     private ConnectionPool() throws ConnectorException {
         try {
@@ -32,7 +37,7 @@ public class ConnectionPool {
         }
         connections = new ArrayDeque<>(COUNT_CONNECTIONS);
         try {
-            ConnectionCreator connectionCreator = new ConnectionCreator(DB_PROPERTIES);
+            connectionCreator = new ConnectionCreator(DB_PROPERTIES);
             for (int i = 0; i < COUNT_CONNECTIONS; i++) {
                 connections.push(new ProxyConnection(connectionCreator.create()));
             }
@@ -56,16 +61,24 @@ public class ConnectionPool {
     }
 
     void releaseConnection(ProxyConnection connection) throws ConnectorException {
-        if (!connection.getAutoCommit()) {
-            connection.setAutoCommit(true);
+        LOGGER.info("RELEASE CONNECTION");
+        lock.lock();
+        if (!connection.isClosed()) {
+            connection.closeConnection();
         }
-        connections.push(connection);
+        ProxyConnection proxyConnection = new ProxyConnection(connectionCreator.create());
+        LOGGER.info("adding new connection = " + proxyConnection);
+        connections.push(proxyConnection);
+        lock.unlock();
+        LOGGER.info("COUNT OF CONNECTIONS = " + connections.size());
     }
 
     public void destroy() throws ConnectorException {
+        lock.lock();
         for (Connection connection : connections) {
             ((ProxyConnection)connection).closeConnection();
         }
+        lock.unlock();
         try {
             DriverManager.deregisterDriver(new com.mysql.cj.jdbc.Driver());
         }
@@ -76,7 +89,13 @@ public class ConnectionPool {
 
 
     Connection getConnection() {
-        return connections.pop();
+        LOGGER.info("GET CONNECTION");
+        lock.lock();
+        Connection connection = connections.pop();
+        LOGGER.info("getting connection = " + connection);
+        lock.unlock();
+        LOGGER.info("COUNT OF CONNECTIONS = " + connections.size());
+        return connection;
     }
 
 }

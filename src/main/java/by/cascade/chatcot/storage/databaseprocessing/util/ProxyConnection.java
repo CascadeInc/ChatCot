@@ -9,10 +9,14 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 public class ProxyConnection implements Connection {
+    private static int number = 0;
+    private String name;
     private Connection connection;
 
     ProxyConnection(Connection connection) {
         this.connection = connection;
+        this.name = "Proxy Connection number " + number;
+        number++;
     }
 
     @Override
@@ -560,5 +564,10 @@ public class ProxyConnection implements Connection {
         catch (SQLException e) {
             throw new ConnectorException("can't getting is wrapper for", e);
         }
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

@@ -1,5 +1,6 @@
 package by.cascade.chatcot.storage.databaseprocessing.user;
 
+import by.cascade.chatcot.storage.databaseprocessing.DataBaseException;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.ResultSet;
@@ -7,11 +8,12 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 
 public interface UserAdapter {
-    void addUser(String name, String password);
-    boolean checkUser(String name, String password);
-    boolean checkLogin(String name);
-    void shutdown();
-    void create();
+    void addUser(String name, String password) throws DataBaseException;
+    UserModel checkUser(String name, String password) throws DataBaseException;
+    boolean checkLogin(String name) throws DataBaseException;
+    void shutdown() throws DataBaseException ;
+    void create() throws DataBaseException;
+    UserModel getUser(String name) throws DataBaseException;
 
     static LinkedList<UserModel> getPhraseModels(ResultSet set, Logger log) {
         try {

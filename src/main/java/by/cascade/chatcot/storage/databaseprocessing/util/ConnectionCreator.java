@@ -10,11 +10,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * class - creator for creating connections
+ */
 public class ConnectionCreator {
     private static final String URL = "jdbc:mysql://localhost:3306/musicstore";
 
     private Properties properties;
 
+    /**
+     * create creator with properties-file
+     * @param path - path of properties file with DataBase properties
+     * @throws CreatorException - if file with properties doesn't exist
+     */
     ConnectionCreator(String path) throws CreatorException {
         properties = new Properties();
         try {
@@ -28,6 +36,11 @@ public class ConnectionCreator {
         }
     }
 
+    /**
+     * create new connection with parameters
+     * @return - new connection
+     * @throws ConnectorException - if can't create connection
+     */
     Connection create() throws ConnectorException {
         try {
             return DriverManager.getConnection(URL, properties);
