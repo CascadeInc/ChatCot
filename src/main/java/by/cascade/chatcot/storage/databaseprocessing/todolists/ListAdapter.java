@@ -11,8 +11,9 @@ import java.util.List;
 
 public interface ListAdapter {
     void addTask(String text, String description, int user);
-    LinkedList<ListModel> listTaskes();
-    LinkedList<ListModel> filterTaskes(Date since, Date until);
+    LinkedList<ListModel> listTaskes(int owner);
+    LinkedList<ListModel> filterTaskes(Date since, Date until, int owner);
+    LinkedList<ListModel> filterTaskesByCheck(Boolean check, int owner);
     void deleteTaskes(List<ListModel> list);
     void deleteId(ListModel model);
     void deleteTask(ListModel model);
@@ -30,7 +31,8 @@ public interface ListAdapter {
                     String text = set.getString(3);
                     String description = set.getString(4);
                     int user = set.getInt(5);
-                    list.add(new ListModel(id, date, text, description, user));
+                    boolean check = set.getBoolean(6);
+                    list.add(new ListModel(id, date, text, description, user, check));
                 }
                 set.close();
                 return list;

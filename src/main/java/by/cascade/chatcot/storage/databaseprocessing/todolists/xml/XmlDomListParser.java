@@ -60,6 +60,7 @@ public class XmlDomListParser implements ListParsable {
             String text = null;
             String description = null;
             int owner = 0;
+            boolean check = false;
 
             File inputFile = new File(path);
             if (!inputFile.exists()) {
@@ -98,11 +99,16 @@ public class XmlDomListParser implements ListParsable {
                 if (ownerString != null) {
                     owner = Integer.valueOf(ownerString);
                 }
+
+                String checkString = getXMLArgument(nNode, "check");
+                if (checkString != null) {
+                    check = Boolean.valueOf(checkString);
+                }
                 else {
                     owner = 0;
                 }
             }
-            return new ListModel(id, date, text, description, owner);
+            return new ListModel(id, date, text, description, owner, check);
         } catch (Exception e) {
             LOGGER.catching(e);
             return null;

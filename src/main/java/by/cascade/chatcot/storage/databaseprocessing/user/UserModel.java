@@ -1,8 +1,14 @@
 package by.cascade.chatcot.storage.databaseprocessing.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserModel {
+    @JsonProperty("id")
     private int id;
+    @JsonProperty("name")
     private String name;
+    @JsonIgnore
     private String password;
 
     public UserModel(int id, String name, String password) {

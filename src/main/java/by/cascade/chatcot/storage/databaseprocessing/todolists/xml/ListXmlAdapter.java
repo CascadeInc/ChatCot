@@ -17,6 +17,7 @@ public class ListXmlAdapter {
             result.append("        <text>").append(model.getText()).append("</text>\n");
             result.append("        <description>").append(model.getDescription()).append("</description>\n");
             result.append("        <owner>").append(model.getOwner()).append("</owner>\n");
+            result.append("        <check>").append(model.getCheck()).append("</check>\n");
             result.append("    </task>\n");
         }
         if ((mask & XMLEND) == XMLEND){

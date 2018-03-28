@@ -55,6 +55,7 @@ public class XmlDomParser implements PhraseParsable {
             String type = null;
             String phrase = null;
             int id = 0;
+            int owner = -1;
 
             File inputFile = new File(path);
             if (!inputFile.exists()) {
@@ -80,8 +81,16 @@ public class XmlDomParser implements PhraseParsable {
                 }
                 type = getXMLArgument(nNode, "type");
                 phrase = getXMLArgument(nNode, "value");
+
+                String ownerString = getXMLArgument(nNode, "owner");
+                if (ownerString != null) {
+                    owner = Integer.valueOf(ownerString);
+                }
+                else {
+                    owner = -1;
+                }
             }
-            return new PhraseModel(id, type, phrase);
+            return new PhraseModel(id, type, phrase, owner);
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.error(e.getMessage());

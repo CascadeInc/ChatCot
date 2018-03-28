@@ -5,6 +5,7 @@
   Time: 10:01
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page session="true" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -25,20 +26,28 @@
 <body>
 <br/>
 <fmt:message key="welcome" var="wel"/>
-<h2 class="text-center">${wel}</h2>
+<h2 class="text-center">${wel} </h2>
+<h2 class="text-center"><c:out value="${sessionScope.userName}"/></h2>
 <br/>
+<% if (session.getAttribute("userName") == null) { %>
 <form action="login" method="post">
     <input type="text" class="text" name="login">
     <input type="password" class="password-field" name="password">
     <button type="submit" class="btn btn-primary">login</button>
     <button type="button" class="btn btn-primary" onClick='location.href="pages/register.jsp"'>sign up</button>
 </form>
+<% } else { %>
+<form action="logout" method="get">
+    <br/>
+    <button type="submit" class="btn btn-primary">logout</button>
+</form>
+<% } %>
 <h4>${loginResult}</h4>
 <h4>${registerResult}</h4>
 <br/>
 
 <form>
-<select id="language" class="form-control" name="language" onchange="submit()">
+<select id="language" class="form-control" name="language">
     <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
     <option value="ru" ${language == 'ru' ? 'selected' : ''}>Russian</option>
 </select>
@@ -58,11 +67,12 @@
         <option value="default">default</option>
         <option value="initialize">initialize</option>
         <option value="filter">filter</option>
+        <option value="filter by check">filter check</option>
         <option value="adding">adding</option>
     </select>
     <% } %>
 </form>
-<h1 class="alert-info"><fmt:message key="result" /> = ${answer}</h1>
+<h1 class="alert-info"><fmt:message key="result" />: </h1>${answer}
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="${request.contextPath}/WEB-INF/lib/http_code.jquery.com_jquery-3.2.1.slim.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
