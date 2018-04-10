@@ -2,11 +2,11 @@ window.onload = start;
 
 function start() {
 
-    var todoList = [];
-    var state = 0;
+    let todoList = [];
+    let state = 0;
     if (localStorage.getItem('todo') != undefined) {
         todoList = JSON.parse(localStorage.getItem('todo'));
-        for (var i = 0; i < todoList.length; i++) {
+        for (let i = 0; i < todoList.length; i++) {
             if (todoList[i] === null) {
                 todoList.splice(i, 1);
             }
@@ -14,11 +14,11 @@ function start() {
         refresh();
     }
 
-    var glId = getStartingId(todoList);
+    let glId = getStartingId(todoList);
 
     document.getElementById('addBtn').onclick = function () {
-        var descr = document.getElementById('descForm').value;
-        var dateStr = document.getElementById("dateForm").value;
+        const descr = document.getElementById('descForm').value;
+        const dateStr = document.getElementById("dateForm").value;
         add(todoList, descr, dateStr, glId);
         writeNotDoneList();
         localStorage.setItem('todo', JSON.stringify(todoList));
@@ -120,7 +120,7 @@ function start() {
     document.getElementById('forgottenList').addEventListener("click", displayForgotten);
 
     function displayForgotten() {
-        syaye = 5;
+        state = 5;
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Forgotten";
         getForgotten(todoList).forEach(function (item) {
@@ -137,9 +137,9 @@ function start() {
     function search() {
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Search results";
-        var searchName = document.getElementById("searchForm").value;
+        const searchName = document.getElementById("searchForm").value;
 
-        getSearchResults(todoList, searchName).forEach(function (elem) {
+        getSearchResults(todoList, searchName).forEach(function (item) {
             writeItem(item);
         });
 
@@ -160,9 +160,13 @@ function start() {
     }
 
     function writeItem(item) {
-        var div = document.createElement('div');
+        const div = document.createElement('div');
         div.className = "Task" + item.id + " Task";
-        div.innerHTML = "<input type='checkbox' id='checkbox" + item.id + "'><div class='TaskDesc'>" + item.todo + "</div><span  class='editbtn btn  btn-light' id='edit" + item.id + "'>Edit</span><span  class='deletebtn btn btn-danger' id='span" + item.id + "'>Delete</span>";
+        div.innerHTML = "<input type='checkbox' id='checkbox" + item.id + "'><div class='TaskDesc'>" +
+            item.date + ": " +
+            item.todo + "</div><span  class='btn  btn-light' id='edit" +
+            item.id + "'>Edit</span><span  class='btn btn-danger' id='span" +
+            item.id + "'>Delete</span>";
 
         document.getElementById('Tasks').appendChild(div);
         document.getElementById('span' + item.id).onclick = deleteItem;
@@ -171,19 +175,20 @@ function start() {
     }
 
     function writeDoneItem(item) {
-        var div = document.createElement('div');
+        const div = document.createElement('div');
         div.className = "Task" + item.id + " Task";
-        div.innerHTML = "<div class='TaskDesc'>" + item.todo + "</div><span  class='deletebtn btn btn-danger' id='span" + item.id + "'>Delete</span>";
+        div.innerHTML = "<div class='TaskDesc'>" + item.date + ": " +
+            item.todo + "</div><span  class='btn btn-danger' id='span" +
+            item.id + "'>Delete</span>";
 
         document.getElementById('Tasks').appendChild(div);
         document.getElementById('span' + item.id).onclick = deleteItem;
     }
 
     function checkItem() {
-        var str = this.id;
-        var id = str.substring(8);
-        var elem = document.getElementsByClassName('Task' + id);
-        var el = elem[0];
+        const str = this.id;
+        const id = str.substring(8);
+        const el = document.getElementsByClassName('Task' + id)[0];
         el.parentNode.removeChild(el);
 
         setChecked(todoList, id);
@@ -192,22 +197,20 @@ function start() {
     }
 
     function editItem() {
-        var str = this.id;
-        var id = str.substring(4);
-        var elem = document.getElementsByClassName('Task' + id);
-        var el = elem[0];
+        const str = this.id;
+        const id = str.substring(4);
+        const el = document.getElementsByClassName('Task' + id)[0];
         el.parentNode.removeChild(el);
-        var newDesc = prompt("Write new description", "write description here");
+        const newDesc = prompt("Write new description", "write description here");
         changeDesc(todoList, id, newDesc);
         localStorage.setItem('todo', JSON.stringify(todoList));
         refresh();
     }
 
     function deleteItem() {
-        var str = this.id;
-        var id = str.substring(4);
-        var elem = document.getElementsByClassName('Task' + id);
-        var el = elem[0];
+        const str = this.id;
+        const id = str.substring(4);
+        const el = document.getElementsByClassName('Task' + id)[0];
         el.parentNode.removeChild(el);
         removeItem(todoList, id);
         localStorage.setItem('todo', JSON.stringify(todoList));
@@ -215,7 +218,7 @@ function start() {
     }
 
     function writeEmptyMessage() {
-        var div = document.createElement('h2');
+        const div = document.createElement('h2');
         div.className = "EmptyH2";
         div.innerHTML = "Oops,<br>Nothing in this list";
         document.getElementById('Tasks').appendChild(div);

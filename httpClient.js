@@ -1,6 +1,6 @@
 var HttpClient = function () {
     this.get = function (url, successCallback, failCallback) {
-        var httpRequest = new XMLHttpRequest();
+        const httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = function () {
             if (httpRequest.readyState == 4) {
                 if (httpRequest.status == 200) {
@@ -13,7 +13,7 @@ var HttpClient = function () {
     };
 
     this.post = function (url, contentType, content, successCallback, failCallback) {
-        var httpRequest = new XMLHttpRequest();
+        const httpRequest = new XMLHttpRequest();
         httpRequest.open("POST", url, true);
         httpRequest.setRequestHeader("Content-type", contentType);
         httpRequest.onreadystatechange = function () {

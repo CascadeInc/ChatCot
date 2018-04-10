@@ -1,10 +1,10 @@
 add = function (array, description, dateString, id) {
     if (description != "") {
-        var temp = {};
+        const temp = {};
         temp.todo = description;
         temp.check = false;
         temp.id = id;
-        var date = new Date(dateString);
+        let date = new Date(dateString);
         if (isNaN(date.getTime()))
             date = new Date();
         temp.date = date.toDateString();
@@ -13,7 +13,7 @@ add = function (array, description, dateString, id) {
 };
 
 getDone = function (array) {
-    var result = [];
+    const result = [];
     array.forEach(function (item) {
         if (item.check === true)
             result.push(item);
@@ -22,7 +22,7 @@ getDone = function (array) {
 };
 
 getNotDone = function (array) {
-    var result = [];
+    const result = [];
     array.forEach(function (item) {
         if (item.check === false)
             result.push(item);
@@ -31,7 +31,7 @@ getNotDone = function (array) {
 };
 
 removeItem = function (array, id) {
-    for (var i = 0; i < array.length; i++)
+    for (let i = 0; i < array.length; i++)
         if (id == array[i].id) {
             array.splice(i, 1);
             break;
@@ -39,7 +39,7 @@ removeItem = function (array, id) {
 };
 
 changeDesc = function (array, id, desc) {
-    for (var i = 0; i < array.length; i++)
+    for (let i = 0; i < array.length; i++)
         if (id == array[i].id) {
             array[i].todo = desc;
             break;
@@ -48,7 +48,7 @@ changeDesc = function (array, id, desc) {
 
 
 getSearchResults = function (array, desc) {
-    var result = [];
+    const result = [];
     array.forEach(function (item) {
         if (item.todo.indexOf(desc) >= 0) {
             result.push(item);
@@ -58,7 +58,7 @@ getSearchResults = function (array, desc) {
 };
 
 setChecked = function (array, id) {
-    for (var i = 0; i < array.length; i++)
+    for (let i = 0; i < array.length; i++)
         if (id == array[i].id) {
             array[i].check = true;
             break;
@@ -66,8 +66,8 @@ setChecked = function (array, id) {
 };
 
 getToday = function (array) {
-    var now = new Date();
-    var result = [];
+    const now = new Date();
+    const result = [];
     array.forEach(function (item) {
         if ((item.date.localeCompare(now.toDateString()) == 0) && (item.check == false)) {
             result.push(item);
@@ -77,12 +77,12 @@ getToday = function (array) {
 };
 
 getWeek = function (array) {
-    var refNow = new Date();
+    const refNow = new Date();
     refNow.setHours(0, 0, 0, 0);
 
-    var result = [];
+    const result = [];
     array.forEach(function (item) {
-        var deadline = new Date(item.date).setHours(0, 0, 0, 0);
+        const deadline = new Date(item.date).setHours(0, 0, 0, 0);
         if ((deadline - refNow < 688248497) && (deadline - refNow >= 0) && (item.check == false)) {
             result.push(item);
         }
@@ -91,11 +91,11 @@ getWeek = function (array) {
 };
 
 getOverdue = function (array) {
-    var refNow = new Date();
+    const refNow = new Date();
     refNow.setHours(0, 0, 0, 0);
-    var result = [];
+    const result = [];
     array.forEach(function (item) {
-        var deadline = new Date(item.date);
+        const deadline = new Date(item.date);
         deadline.setHours(0, 0, 0, 0);
         if ((deadline - refNow < 0) && (item.check == false)) {
             result.push(item);
@@ -105,11 +105,11 @@ getOverdue = function (array) {
 };
 
 getForgotten = function (array) {
-    var result = [];
-    var refNow = new Date();
+    const result = [];
+    const refNow = new Date();
     refNow.setHours(0, 0, 0, 0);
     array.forEach(function (item) {
-        var deadline = new Date(item.date).setHours(0, 0, 0, 0);
+        const deadline = new Date(item.date).setHours(0, 0, 0, 0);
         if ((deadline - refNow < -688248497) && (deadline - refNow < 0) && (item.check == false)) {
             result.push(item);
         }
@@ -118,7 +118,7 @@ getForgotten = function (array) {
 };
 
 getStartingId = function (array) {
-    var max = 0;
+    let max = 0;
     array.forEach(function (item) {
         if (item.id > max) max = item.id;
     });

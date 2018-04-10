@@ -3,7 +3,6 @@ body {
     height: auto;
     margin: 0;
     padding: 0;
-    font-family: lucida console;
 }
 
 #logo {
@@ -11,7 +10,7 @@ body {
     width: 3%
 }
 
-.innertube {
+.filter-menu {
     position: fixed;
     top: 8%;
     left: 2%;
@@ -52,4 +51,12 @@ li {
 
 #searchForm {
     width: 70%;
+}
+
+#descForm {
+    margin-bottom: 10px;
+}
+
+#dateForm {
+    margin-bottom: 15px;
 }
