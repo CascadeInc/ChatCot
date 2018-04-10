@@ -1,189 +1,55 @@
 body {
     width: auto;
     height: auto;
-    margin:0;
-    padding:0;
-	font-family: lucida console;
-	line-height: 1.5em;
-}
-			
-#header {
-    position: relative;
-    background: linear-gradient(0deg, #d6e5ff, #005cff);
-	height: 200px;
-}
-			
-#header h1 {
-    position: relative;
-    font-family: 'Baloo Tamma', cursive;
     margin: 0;
-    color: white;
-	padding-top: 45px;
-    padding-bottom: -10px;
-    left: 250px;
-    font-variant: small-caps;
-    letter-spacing: 5px;
-    text-shadow: 3px 3px 0px #4787f7,
-    6px 6px 0px #063484;
-    font-size: 80px;
+    padding: 0;
+    font-family: lucida console;
 }
 
-
-#logo{
-    position:absolute;
-    transform: scale(0.55) translate(-60px, -90px);
+#logo {
+    height: 3%;
+    width: 3%
 }
 
-.searchDiv {
-    position: absolute;
-    right: 110px;
-    bottom: 10px;
-}
-
-main {
-    float: left;
-    width: 100%;
-}
-			
-#nav {
-    min-height: 300hv;
-    float: left;
-    width: 230px;
-    margin-left: -100%;
-    border-right: 2px solid #0d47ad;
-}
-					
-#wrapper {
-    overflow: hidden;
-    float: left;
-}
-						
-#content {
-    margin-left: 230px; /* Same as 'nav' width */
-}
-			
 .innertube {
-    margin: 15px; /* Padding for content */
-    margin-top: 0;	
-}	
+    position: fixed;
+    top: 8%;
+    left: 2%;
+    margin-right: 5%;
+}
 
-nav ul {
-    list-style-type: none;	
+.TaskDesc {
+    display: inline-block;
+    width: 40%;
+}
+
+.Tasks {
+    padding-top: 5%;
+    padding-left: 20%;
 }
 
 li {
-    margin-top: 15px;
+    list-style-type: none;
 }
 
-.Task {
-    padding: 20px;
-    margin: 5px;
-    border: 3px solid #0d47ad;
-    border-radius: 15px;
-    position: relative;
+#navbar-top {
+    position: fixed;
+    width: 100%;
 }
 
 .addToDo {
-    margin-left: 25px;
-    margin-top: 10px; 
-    margin-bottom: 10px;
-}
-
-.EmptyH2 {
-    margin-left: 50px;
+    position: fixed;
+    top: 8%;
+    right: 8%;
+    float: right;
+    width: 20%;
 }
 
 #descForm, #searchForm, #dateForm {
-    border-radius: 3px;
-    height: 30px;
+    display: inline-flex;
+    margin-right: 5px;
 }
 
 #searchForm {
-    width: 190px;
-}
-
-.addBtn{
-    width: 150px;
-    right:10px;
-    top: -5px;
-    padding: 10px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    color: #80a2dd;
-    background: #dbe8ff;
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 5px;
-}
-
-.addBtn:hover{
-    background: black;
-}
-
-.menubtn {
-    padding: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    width: 25%;
-    color: #80a2dd;
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.menubtn:hover {
-    color: #0c409b;
-}
-
-.deletebtn {
-    position:  absolute;
-    right:10px;
-    top: -5px;
-    padding: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    width: 25%;
-    color: #80a2dd;
-    background: #dbe8ff;
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 15px;
-}
-
-.deletebtn:hover {
-    background: #49566b;
-}
-
-.editbtn {
-    position:  absolute;
-    right:190px;
-    top: -5px;
-    padding: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    width: 25%;
-    color: #80a2dd;
-    background: #dbe8ff;
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 15px;
-}
-
-.editbtn:hover {
-    background: #49566b;
-}
-
-hr {
-    border: none; /* Убираем границу */
-    background-color: #0d47ad; /* Цвет линии */
-    color: #0d47ad; /* Цвет линии для IE6-7 */
-    height: 2px; /* Толщина линии */
-    padding: 0;
-    margin: 0;
+    width: 70%;
 }

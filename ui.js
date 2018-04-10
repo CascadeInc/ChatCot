@@ -3,6 +3,7 @@ window.onload = start;
 function start() {
 
     var todoList = [];
+    var state = 0;
     if (localStorage.getItem('todo') != undefined) {
         todoList = JSON.parse(localStorage.getItem('todo'));
         for (var i = 0; i < todoList.length; i++) {
@@ -10,7 +11,7 @@ function start() {
                 todoList.splice(i, 1);
             }
         }
-        writeNotDoneList();
+        refresh();
     }
 
     var glId = getStartingId(todoList);
@@ -26,15 +27,40 @@ function start() {
 
     document.getElementById('allList').onclick = function () {
         document.title = "ToDo List";
-        writeNotDoneList();
+        state = 0;
+        refresh();
         if (document.getElementById('Tasks').innerHTML === '') {
             writeEmptyMessage();
         }
     };
 
+    function refresh() {
+        switch (state) {
+            case 0:
+                writeNotDoneList();
+                break;
+            case 1:
+                displayToday();
+                break;
+            case 2:
+                displayWeek();
+                break;
+            case 3:
+                displayOverdue();
+                break;
+            case 4:
+                displayDone();
+                break;
+            case 5:
+                displayForgotten();
+                break;
+        }
+    }
+
     document.getElementById('doneList').onclick = displayDone;
 
     function displayDone() {
+        state = 4;
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Done";
         getDone(todoList).forEach(function (item) {
@@ -49,6 +75,7 @@ function start() {
     document.getElementById('todayList').addEventListener("click", displayToday);
 
     function displayToday() {
+        state = 1;
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Today";
         getToday(todoList).forEach(function (item) {
@@ -63,6 +90,7 @@ function start() {
     document.getElementById('next7DayList').addEventListener("click", displayWeek);
 
     function displayWeek() {
+        state = 2;
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Week";
         getWeek(todoList).forEach(function (item) {
@@ -77,6 +105,7 @@ function start() {
     document.getElementById('overdueList').addEventListener("click", displayOverdue);
 
     function displayOverdue() {
+        state = 3;
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Overdue";
         getOverdue(todoList).forEach(function (item) {
@@ -91,6 +120,7 @@ function start() {
     document.getElementById('forgottenList').addEventListener("click", displayForgotten);
 
     function displayForgotten() {
+        syaye = 5;
         document.getElementById('Tasks').innerHTML = '';
         document.title = "Forgotten";
         getForgotten(todoList).forEach(function (item) {
@@ -132,7 +162,7 @@ function start() {
     function writeItem(item) {
         var div = document.createElement('div');
         div.className = "Task" + item.id + " Task";
-        div.innerHTML = "<input type='checkbox' id='checkbox" + item.id + "'>" + item.todo + "<span  class='deletebtn' id='span" + item.id + "'>Delete</span>" + "<span  class='editbtn' id='edit" + item.id + "'>Edit</span>";
+        div.innerHTML = "<input type='checkbox' id='checkbox" + item.id + "'><div class='TaskDesc'>" + item.todo + "</div><span  class='editbtn btn  btn-light' id='edit" + item.id + "'>Edit</span><span  class='deletebtn btn btn-danger' id='span" + item.id + "'>Delete</span>";
 
         document.getElementById('Tasks').appendChild(div);
         document.getElementById('span' + item.id).onclick = deleteItem;
@@ -143,7 +173,7 @@ function start() {
     function writeDoneItem(item) {
         var div = document.createElement('div');
         div.className = "Task" + item.id + " Task";
-        div.innerHTML = item.todo + "<span  class='deletebtn' id='span" + item.id + "'>Delete</span>";
+        div.innerHTML = "<div class='TaskDesc'>" + item.todo + "</div><span  class='deletebtn btn btn-danger' id='span" + item.id + "'>Delete</span>";
 
         document.getElementById('Tasks').appendChild(div);
         document.getElementById('span' + item.id).onclick = deleteItem;
@@ -170,7 +200,7 @@ function start() {
         var newDesc = prompt("Write new description", "write description here");
         changeDesc(todoList, id, newDesc);
         localStorage.setItem('todo', JSON.stringify(todoList));
-        writeNotDoneList();
+        refresh();
     }
 
     function deleteItem() {
@@ -181,7 +211,7 @@ function start() {
         el.parentNode.removeChild(el);
         removeItem(todoList, id);
         localStorage.setItem('todo', JSON.stringify(todoList));
-        writeNotDoneList();
+        refresh();
     }
 
     function writeEmptyMessage() {

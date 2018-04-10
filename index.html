@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ToDo List</title>
+    <link rel="stylesheet" href="cssToDo.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+            integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+            integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+            crossorigin="anonymous"></script>
+    <script src="httpClient.js"></script>
+    <script src="arrayFunctions.js"></script>
+    <script src="ui.js"></script>
+</head>
+
+<body>
+<nav class="navbar navbar-dark bg-dark" id="navbar-top">
+    <div class="container-fluid">
+        <img id="logo" src="res/icon.png"/>
+
+        <div class="searchDiv navbar-form navbar-left">
+            <input class="form-control" type="text" id="searchForm" placeholder="Search..">
+            <span class="btn btn-light" id="searchBtn">Search</span>
+        </div>
+    </div>
+</nav>
+<div class="addToDo" class="form-group">
+    <input type="text" id="descForm" class="form-control" placeholder="Describe your task">
+    <input class="form-control" type="date" id="dateForm"/>
+    <span class="addBtn btn btn-primary" id="addBtn">Add new task</span>
+</div>
+
+<div class="innertube">
+    <ul>
+        <li><span class="btn" id="allList">All</span></li>
+        <li><span class="btn" id="todayList">Today</span></li>
+        <li><span class="btn" id="next7DayList">Next 7 days</span></li>
+        <li><span class="btn" id="overdueList">Overdue</span></li>
+        <li><span class="btn" id="doneList">Done</span></li>
+        <li><span class="btn" id="forgottenList">Forgotten</span></li>
+    </ul>
+</div>
+
+<div class="Tasks" id="Tasks">
+</div>
+</html>
