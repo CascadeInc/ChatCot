@@ -98,9 +98,10 @@ function start() {
     let addBtn = document.getElementById('addBtn');
     if (addBtn!=null)
     addBtn.onclick = function () {
+        const name = document.getElementById('nameForm').value;
         const descr = document.getElementById('descForm').value;
         const dateStr = document.getElementById("dateForm").value;
-        add(todoList, descr, dateStr, glId);
+        add(todoList,name, descr, dateStr, glId);
         writeNotDoneList();
         localStorage.setItem('todo', JSON.stringify(todoList));
         glId++;
@@ -247,7 +248,8 @@ function start() {
     function writeItem(item) {
         const div = document.createElement('div');
         div.className = "Task" + item.id + " Task";
-        div.innerHTML = "<input type='checkbox' id='checkbox" + item.id + "'><div class='TaskDesc'>" +
+        div.innerHTML = "<input type='checkbox' id='checkbox" + item.id + "'><div class='TaskDesc'><b>" +
+            item.description + " </b>"+
             item.date + ": " +
             item.todo + "</div><span  class='btn  btn-light' id='edit" +
             item.id + "'>Edit</span><span  class='btn btn-danger' id='span" +
@@ -262,7 +264,9 @@ function start() {
     function writeDoneItem(item) {
         const div = document.createElement('div');
         div.className = "Task" + item.id + " Task";
-        div.innerHTML = "<div class='TaskDesc'>" + item.date + ": " +
+        div.innerHTML = "<div class='TaskDesc'><b>" +
+            item.description + " </b>"+
+            item.date + ": " +
             item.todo + "</div><span  class='btn btn-danger' id='span" +
             item.id + "'>Delete</span>";
 

@@ -1,6 +1,7 @@
-add = function (array, description, dateString, id) {
+add = function (array, name, description, dateString, id) {
     if (description != "") {
         const temp = {};
+        temp.description = name;
         temp.todo = description;
         temp.check = false;
         temp.id = id;

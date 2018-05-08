@@ -26,8 +26,8 @@ body {
 
 .TaskDesc {
     display: inline-block;
-    width: 40%;
-    margin-left: 10px;
+    width: 70%;
+    padding-bottom: 10px;
 }
 
 li {
