@@ -84,7 +84,8 @@ public class LoginServlet extends HttpServlet {
         } catch (DataBaseException e) {
             LOGGER.catching(e);
             throw new RuntimeException(e);
-        } finally {
+        }
+        finally {
             if (userAdapter != null) {
                 userAdapter.shutdown();
             }
