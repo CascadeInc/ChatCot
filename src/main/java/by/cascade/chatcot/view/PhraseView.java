@@ -1,15 +1,22 @@
 package by.cascade.chatcot.view;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseModel.DATE_FORMAT;
 
 public class PhraseView {
+    @JsonProperty("phrase")
     private String phrase;
+    @JsonProperty("type")
     private String type;
+    @JsonProperty("date")
     private Date date;
+    @JsonProperty("owner")
     private String owner;
+    @JsonProperty("id")
     private int id;
 
     public PhraseView(int id, String phrase, String type, Date date, String owner) {

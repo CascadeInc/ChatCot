@@ -74,6 +74,5 @@ public class AddPerformServlet extends HttpServlet {
                 phraseAdapter.shutdown();
             }
         }
-        response.sendRedirect("/admin");
     }
 }

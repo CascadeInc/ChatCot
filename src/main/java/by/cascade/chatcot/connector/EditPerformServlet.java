@@ -1,9 +1,11 @@
 package by.cascade.chatcot.connector;
 
+import by.cascade.chatcot.jsonmodel.EditPhraseJson;
 import by.cascade.chatcot.storage.databaseprocessing.DataBaseException;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseAdapter;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseModel;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.mysql.PhrasesMySqlAdapter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,9 +52,13 @@ public class EditPerformServlet extends HttpServlet {
         try {
             phraseAdapter = new PhrasesMySqlAdapter();
 
-            String newPhraseText = request.getParameter("phraseTextNew");
-            String newType = request.getParameter("choiceType");
-            String id = request.getParameter("phraseItemId");
+            ObjectMapper mapper = new ObjectMapper();
+            EditPhraseJson editJson = mapper.readValue(request.getInputStream(), EditPhraseJson.class);
+
+            String newPhraseText = editJson.getNewPhraseText();
+            String newType = editJson.getNewType();
+            String id = editJson.getId();
+
             phraseAdapter.editPhrase(Integer.valueOf(id), newPhraseText, newType);
         } catch (DataBaseException e) {
             LOGGER.catching(e);

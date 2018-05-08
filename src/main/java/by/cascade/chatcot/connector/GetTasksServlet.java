@@ -1,9 +1,15 @@
 package by.cascade.chatcot.connector;
 
-import by.cascade.chatcot.jsonmodel.PhraseDeleteJson;
 import by.cascade.chatcot.storage.databaseprocessing.DataBaseException;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseAdapter;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.mysql.PhrasesMySqlAdapter;
+import by.cascade.chatcot.storage.databaseprocessing.todolists.ListAdapter;
+import by.cascade.chatcot.storage.databaseprocessing.todolists.ListModel;
+import by.cascade.chatcot.storage.databaseprocessing.todolists.xml.ListModelXmlAdapter;
+import by.cascade.chatcot.storage.databaseprocessing.todolists.xml.XmlDomListParser;
+import by.cascade.chatcot.storage.databaseprocessing.user.UserAdapter;
+import by.cascade.chatcot.storage.databaseprocessing.user.UserModel;
+import by.cascade.chatcot.storage.databaseprocessing.user.mysql.UserMySqlAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,9 +19,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.LinkedList;
 
-public class DeleteServlet extends HttpServlet {
-    private static final Logger LOGGER = LogManager.getLogger(DeleteServlet.class);
+public class GetTasksServlet extends HttpServlet {
+    private static final Logger LOGGER = LogManager.getLogger(GetTasksServlet.class);
+    private static final String LIST_XML_PATH = "lists.xml";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,22 +53,35 @@ public class DeleteServlet extends HttpServlet {
      */
     private void doOperation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DataBaseException {
         PhraseAdapter phraseAdapter = null;
+        UserAdapter userAdapter = null;
+        ListAdapter listAdapter = null;
+
         try {
             phraseAdapter = new PhrasesMySqlAdapter();
+            userAdapter = new UserMySqlAdapter();
+            listAdapter = new ListModelXmlAdapter(getServletContext().getRealPath("") + LIST_XML_PATH, new XmlDomListParser());
 
-            ObjectMapper mapper = new ObjectMapper();
-            PhraseDeleteJson phraseJson = mapper.readValue(request.getInputStream(), PhraseDeleteJson.class);
-
-            String id = phraseJson.getId();
-            phraseAdapter.deleteId(Integer.valueOf(id));
-
+            String userName = (String) request.getSession().getAttribute("userName");
+            if (userName != null) {
+                UserModel model = userAdapter.getUser(userName);
+                int id = model.getId();
+                LinkedList<ListModel> list = listAdapter.listTaskes(id);
+                MainServlet.writeJson(response, list);
+                response.setStatus(200);
+            }
         } catch (DataBaseException e) {
             LOGGER.catching(e);
             throw new RuntimeException(e);
         }
         finally {
+            if (userAdapter != null) {
+                userAdapter.shutdown();
+            }
             if (phraseAdapter != null) {
                 phraseAdapter.shutdown();
+            }
+            if (listAdapter != null) {
+                listAdapter.shutdown();
             }
         }
     }

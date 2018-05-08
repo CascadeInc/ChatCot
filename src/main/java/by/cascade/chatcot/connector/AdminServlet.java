@@ -65,7 +65,8 @@ public class AdminServlet extends HttpServlet {
                     }
                 }
             }
-            request.setAttribute("phrasesList", result);
+            MainServlet.writeJson(response, result);
+            response.setStatus(200);
         } catch (DataBaseException e) {
             LOGGER.catching(e);
             throw new RuntimeException(e);
@@ -78,6 +79,5 @@ public class AdminServlet extends HttpServlet {
                 phraseAdapter.shutdown();
             }
         }
-        request.getRequestDispatcher("/pages/admin.jsp").forward(request, response);
     }
 }

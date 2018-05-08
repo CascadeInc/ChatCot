@@ -73,6 +73,11 @@
         <servlet-name>AddPerformServlet</servlet-name>
         <servlet-class>by.cascade.chatcot.connector.AddPerformServlet</servlet-class>
     </servlet>
+    <servlet>
+        <display-name>GetTasksServletDisplay</display-name>
+        <servlet-name>GetTasksServlet</servlet-name>
+        <servlet-class>by.cascade.chatcot.connector.GetTasksServlet</servlet-class>
+    </servlet>
 
 
     <servlet-mapping>
@@ -114,6 +119,10 @@
     <servlet-mapping>
         <servlet-name>AddPerformServlet</servlet-name>
         <url-pattern>/addPerform</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetTasksServlet</servlet-name>
+        <url-pattern>/getTasks</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>
