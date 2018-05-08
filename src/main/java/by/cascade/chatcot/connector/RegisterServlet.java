@@ -34,8 +34,7 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             doOperation(req, resp);
-        }
-        catch (DataBaseException | MailException e) {
+        } catch (DataBaseException | MailException e) {
             LOGGER.catching(e);
         }
     }
@@ -69,21 +68,20 @@ public class RegisterServlet extends HttpServlet {
                 if (check) {
                     String uuid = RegistrantKeyMap.getInstance().addValue(new UserModel(-1, email, login, password));
                     MailSender sender = new MailSender(MAIL);
-                    sender.sendUrl("register: ","register" + "?uuid=" + uuid, email);
-                    response.sendRedirect("http://localhost:8080");
+                    sender.sendUrl("register: ", "register" + "?uuid=" + uuid, email);
+                    response.setStatus(200);
                 } else {
                     request.setAttribute("registerResult", "user is already login");
-                    request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
+                    response.setStatus(401);
                 }
             } else {
                 request.setAttribute("registerResult", "passwords are not equals");
-                request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
+                response.setStatus(401);
             }
         } catch (DataBaseException e) {
             LOGGER.catching(e);
             throw new RuntimeException(e);
-        }
-        finally {
+        } finally {
             if (userAdapter != null) {
                 userAdapter.shutdown();
             }

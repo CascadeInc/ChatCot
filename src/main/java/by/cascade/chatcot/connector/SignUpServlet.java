@@ -27,8 +27,7 @@ public class SignUpServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             doOperation(req, resp);
-        }
-        catch (DataBaseException | MailException e) {
+        } catch (DataBaseException | MailException e) {
             LOGGER.catching(e);
         }
     }
@@ -37,8 +36,7 @@ public class SignUpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             doOperation(req, resp);
-        }
-        catch (DataBaseException | MailException e) {
+        } catch (DataBaseException | MailException e) {
             LOGGER.catching(e);
         }
     }
@@ -65,15 +63,12 @@ public class SignUpServlet extends HttpServlet {
                 if (phrases != null && !phrases.isEmpty()) {
                     response.addCookie(new Cookie("userScore", Integer.toString(phrases.size())));
                     response.setStatus(200);
-                }
-                else {
+                } else {
                     response.addCookie(new Cookie("userScore", Integer.toString(0)));
                     response.setStatus(200);
                 }
             }
-            response.sendRedirect("http://localhost:8080");
-        }
-        catch (DataBaseException e) {
+        } catch (DataBaseException e) {
             throw new RuntimeException(e);
         }
     }

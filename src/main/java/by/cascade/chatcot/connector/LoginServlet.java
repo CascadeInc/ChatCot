@@ -36,8 +36,7 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             doOperation(req, resp);
-        }
-        catch (DataBaseException e) {
+        } catch (DataBaseException e) {
             LOGGER.catching(e);
         }
     }
@@ -71,11 +70,8 @@ public class LoginServlet extends HttpServlet {
                 LinkedList<PhraseModel> phrases = phraseAdapter.findByOwner(userModel.getName());
                 if (phrases != null && !phrases.isEmpty()) {
                     response.addCookie(new Cookie("userScore", Integer.toString(phrases.size())));
-                    response.setStatus(200);
-                }
-                else {
+                } else {
                     response.addCookie(new Cookie("userScore", Integer.toString(0)));
-                    response.setStatus(200);
                 }
                 response.addCookie(new Cookie("userName", userModel.getName()));
                 response.setStatus(200);
@@ -86,8 +82,7 @@ public class LoginServlet extends HttpServlet {
         } catch (DataBaseException e) {
             LOGGER.catching(e);
             throw new RuntimeException(e);
-        }
-        finally {
+        } finally {
             if (userAdapter != null) {
                 userAdapter.shutdown();
             }
