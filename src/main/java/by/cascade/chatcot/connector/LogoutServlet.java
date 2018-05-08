@@ -12,8 +12,10 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().setAttribute("userName", null);
         req.getSession().setAttribute("userScore", null);
+        req.getSession().setAttribute("userRole", null);
         resp.addCookie(new Cookie("userName", ""));
         resp.addCookie(new Cookie("userScore", ""));
+        resp.addCookie(new Cookie("userRole", ""));
         resp.setStatus(200);
     }
 }

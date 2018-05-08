@@ -78,6 +78,16 @@
         <servlet-name>GetTasksServlet</servlet-name>
         <servlet-class>by.cascade.chatcot.connector.GetTasksServlet</servlet-class>
     </servlet>
+    <servlet>
+        <display-name>GetPhrasesServletDisplay</display-name>
+        <servlet-name>GetPhrasesServlet</servlet-name>
+        <servlet-class>by.cascade.chatcot.connector.GetPhrasesServlet</servlet-class>
+    </servlet>
+    <servlet>
+    <display-name>EditTaskServletDisplay</display-name>
+    <servlet-name>EditTaskServlet</servlet-name>
+    <servlet-class>by.cascade.chatcot.connector.EditTaskServlet</servlet-class>
+</servlet>
 
 
     <servlet-mapping>
@@ -123,6 +133,14 @@
     <servlet-mapping>
         <servlet-name>GetTasksServlet</servlet-name>
         <url-pattern>/getTasks</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetPhrasesServlet</servlet-name>
+        <url-pattern>/getPhrases</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditTaskServlet</servlet-name>
+        <url-pattern>/editTask</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

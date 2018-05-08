@@ -15,7 +15,7 @@ public enum CommandConstants {
     INITIALIZE_COMMAND("initialize", 0),
     FILTER_COMMAND("filter", 2),
     FILTER_COMMAND_BY_CHECK("filter check", 1),
-    ADDING_COMMAND("adding", 2);
+    ADDING_COMMAND("adding", 3);
 
     private final String command;
     private final int arguments;

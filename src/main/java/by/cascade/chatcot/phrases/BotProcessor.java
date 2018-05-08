@@ -233,7 +233,7 @@ public class BotProcessor {
 
         adapter.addPhrase(FILTER_COMMAND_BY_CHECK.getCommand(), "filter check {}", 0);
 
-        adapter.addPhrase(ADDING_COMMAND.getCommand(), "add {} {}", 0);
+        adapter.addPhrase(ADDING_COMMAND.getCommand(), "add {} {} {}", 0);
 
     }
 

@@ -68,7 +68,7 @@ public class GetTasksServlet extends HttpServlet {
                 LinkedList<ListModel> list = listAdapter.listTaskes(id);
                 MainServlet.writeJson(response, list);
                 response.setStatus(200);
-            }
+            } else response.setStatus(401);
         } catch (DataBaseException e) {
             LOGGER.catching(e);
             throw new RuntimeException(e);

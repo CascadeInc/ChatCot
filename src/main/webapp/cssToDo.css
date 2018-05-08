@@ -30,6 +30,9 @@ body {
     padding-bottom: 10px;
 }
 
+.phrase {
+    width: 70%;
+}
 li {
     list-style-type: none;
 }

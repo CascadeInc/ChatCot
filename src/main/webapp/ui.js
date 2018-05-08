@@ -81,18 +81,86 @@ function start() {
     }
 
     if (getCookie("userName")==undefined||getCookie("userName")=="") return;
+    if (window.location.href.indexOf("/admin")!=-1)
+    {
+        let httpClient = new HttpClient();
+        httpClient.get("/getPhrases",function (responseText) {
+            let phrases = JSON.parse(responseText);
+            document.getElementById("phrasesDisplay").innerHTML="";
+            if(getCookie("userRole")!="admin")
+            phrases.forEach(function (element) {
+                let div = document.createElement("div");
+                div.innerHTML="<p>"+element.id+": "+element.phrase+" - "+element.type+"; Added: "+new Date(element.date).toDateString()+"</p>";
+                document.getElementById("phrasesDisplay").appendChild(div);
+            });
+            else {
+                document.getElementById("editFormContainer").innerHTML="<input type=\"text\" class=\"form-control\" id=\"phraseInput\" name=\"phraseInput\" placeholder=\"New phrase\">"+
+                    "<select class='form-control' id = 'selectTypeInput'>" +
+                    "<option value = 'standard greetings'>standard greetings</option>" +
+                    "<option value = 'special greetings'>special greetings</option>" +
+                    "<option value = 'question greetings'>question greetings</option>" +
+                    "<option value = 'greetings answer'>greetings answer</option>" +
+                    "<option value = 'yes'>yes</option>" +
+                    "<option value = 'no'>no</option>" +
+                    "<option value = 'default'>default</option>" +
+                    "<option value = 'filter'>filter</option>" +
+                    "<option value = 'filter check'>filter check</option>" +
+                    "<option value = 'adding'>adding</option>" +
+                    "</select>";
+                phrases.forEach(function (element) {
+                    let div = document.createElement("div");
+                    div.innerHTML += "<p class='phrase'>" +
+                        element.id + ": " +
+                        element.phrase + " - " +
+                        element.type + "; Added: " +
+                        new Date(element.date).toDateString() +
+                        "</p>"+
+                        "<button class='btn btn-default edit-phrase-btn' id='ed"+element.id+"'>Edit</button>"+
+                        "<button class='btn btn-danger delete-phrase-btn' id='del"+element.id+"'>Delete</button>";
+                    document.getElementById("phrasesDisplay").appendChild(div);
+                    document.getElementById("ed"+element.id).onclick = function(){
+                        let phrase = document.getElementById("phraseInput").value;
+                        if(phrase == null || phrase == "") return;
+                        let choice = document.getElementById("selectTypeInput").value
+                        let newPhr = {phraseTextNew:phrase,choiceType:choice,phraseItemId:this.id.substr(2)};
+                        let httpClient = new HttpClient();
+                        httpClient.post("/editPerform","application/json",JSON.stringify(newPhr),function () {
+                            window.location.reload();
+                        },function () {
+                            window.location.reload();
+                        })
+                    };
+                    document.getElementById("del"+element.id).onclick = function(){
+                        let json = {phraseItemId:this.id.substr(3)}
+                        let httpClient = new HttpClient();
+                        httpClient.post("/delete","application/json",JSON.stringify(json),function () {
+                            window.location.reload();
+                        },function () {
+                            window.location.reload();
+                        })
+                    }
+
+                });
+            }
+        }, function () {
+
+        })
+    }
     bot_start(document);
     let todoList = [];
     let state = 0;
-    if (localStorage.getItem('todo') != undefined) {
-        todoList = JSON.parse(localStorage.getItem('todo'));
+    let httpClient = new HttpClient();
+    httpClient.get("/getTasks",function (responseText) {
+        todoList = JSON.parse(responseText);
         for (let i = 0; i < todoList.length; i++) {
             if (todoList[i] === null) {
                 todoList.splice(i, 1);
             }
         }
         refresh();
-    }
+    },function () {
+
+    });
 
     let glId = getStartingId(todoList);
     let addBtn = document.getElementById('addBtn');
@@ -250,7 +318,7 @@ function start() {
         div.className = "Task" + item.id + " Task";
         div.innerHTML = "<input type='checkbox' id='checkbox" + item.id + "'><div class='TaskDesc'><b>" +
             item.description + " </b>"+
-            item.date + ": " +
+            new Date(item.date).toDateString() + ": " +
             item.todo + "</div><span  class='btn  btn-light' id='edit" +
             item.id + "'>Edit</span><span  class='btn btn-danger' id='span" +
             item.id + "'>Delete</span>";
@@ -266,7 +334,7 @@ function start() {
         div.className = "Task" + item.id + " Task";
         div.innerHTML = "<div class='TaskDesc'><b>" +
             item.description + " </b>"+
-            item.date + ": " +
+            new Date(item.date).toDateString() + ": " +
             item.todo + "</div><span  class='btn btn-danger' id='span" +
             item.id + "'>Delete</span>";
 
