@@ -1,10 +1,13 @@
 package by.cascade.chatcot.connector;
 
-import by.cascade.chatcot.jsonmodel.UserLoginJson;
+import by.cascade.chatcot.jsonmodel.TaskWithIdJson;
 import by.cascade.chatcot.storage.databaseprocessing.DataBaseException;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseAdapter;
-import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseModel;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.mysql.PhrasesMySqlAdapter;
+import by.cascade.chatcot.storage.databaseprocessing.todolists.ListAdapter;
+import by.cascade.chatcot.storage.databaseprocessing.todolists.ListModel;
+import by.cascade.chatcot.storage.databaseprocessing.todolists.xml.ListModelXmlAdapter;
+import by.cascade.chatcot.storage.databaseprocessing.todolists.xml.XmlDomListParser;
 import by.cascade.chatcot.storage.databaseprocessing.user.UserAdapter;
 import by.cascade.chatcot.storage.databaseprocessing.user.UserModel;
 import by.cascade.chatcot.storage.databaseprocessing.user.mysql.UserMySqlAdapter;
@@ -13,23 +16,24 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.LinkedList;
 
-/**
- * Servlet of login system
- */
-public class LoginServlet extends HttpServlet {
-    private static final Logger LOGGER = LogManager.getLogger(LoginServlet.class);
+public class EditTaskServlet extends HttpServlet {
+    private static final Logger LOGGER = LogManager.getLogger(EditTaskServlet.class);
+    private static final String LIST_XML_PATH = "lists.xml";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+        try {
+            doOperation(req, resp);
+        }
+        catch (DataBaseException e) {
+            LOGGER.catching(e);
+        }
     }
 
     @Override
@@ -43,8 +47,6 @@ public class LoginServlet extends HttpServlet {
     }
 
     /**
-     * perform login operation
-     *
      * @param request  - request from browser
      * @param response - response to browser
      * @throws ServletException - exception of servlet
@@ -52,41 +54,31 @@ public class LoginServlet extends HttpServlet {
      */
     private void doOperation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DataBaseException {
         UserAdapter userAdapter = null;
+        ListAdapter listAdapter = null;
+
         try {
             userAdapter = new UserMySqlAdapter();
+            listAdapter = new ListModelXmlAdapter(getServletContext().getRealPath("") + LIST_XML_PATH, new XmlDomListParser());
+            String userName = (String) request.getSession().getAttribute("userName");
+            if (userName != null) {
+                ObjectMapper mapper = new ObjectMapper();
+                TaskWithIdJson taskJson = mapper.readValue(request.getInputStream(), TaskWithIdJson.class);
 
-            ObjectMapper mapper = new ObjectMapper();
-            UserLoginJson userLoginJson = mapper.readValue(request.getInputStream(), UserLoginJson.class);
-
-            String login = userLoginJson.getName();
-            String password = userLoginJson.getPassword();
-
-            UserModel userModel = userAdapter.checkUser(login, password);
-
-            if (userModel != null) {
-                LOGGER.debug("login is successfully: " + login);
-                request.getSession().setAttribute("userName", userModel.getName());
-
-                PhraseAdapter phraseAdapter = new PhrasesMySqlAdapter();
-                LinkedList<PhraseModel> phrases = phraseAdapter.findByOwner(userModel.getName());
-                if (phrases != null && !phrases.isEmpty()) {
-                    response.addCookie(new Cookie("userScore", Integer.toString(phrases.size())));
-                } else {
-                    response.addCookie(new Cookie("userScore", Integer.toString(0)));
-                }
-                response.addCookie(new Cookie("userName", userModel.getName()));
-                response.addCookie(new Cookie("userRole", userModel.getRole()));
+                UserModel model = userAdapter.getUser(userName);
+                int id = model.getId();
+                listAdapter.changeTask(taskJson, id);
                 response.setStatus(200);
-            } else {
-                LOGGER.debug("login is not successfully: " + login);
-                response.setStatus(401);
             }
         } catch (DataBaseException e) {
             LOGGER.catching(e);
             throw new RuntimeException(e);
-        } finally {
+        }
+        finally {
             if (userAdapter != null) {
                 userAdapter.shutdown();
+            }
+            if (listAdapter != null) {
+                listAdapter.shutdown();
             }
         }
     }

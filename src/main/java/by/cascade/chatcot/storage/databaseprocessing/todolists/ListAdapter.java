@@ -1,5 +1,6 @@
 package by.cascade.chatcot.storage.databaseprocessing.todolists;
 
+import by.cascade.chatcot.jsonmodel.TaskWithIdJson;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseModel;
 import org.apache.logging.log4j.Logger;
 
@@ -10,14 +11,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public interface ListAdapter {
-    void addTask(String text, String description, int user);
+    void addTask(String text, String description, Date date, int user);
     LinkedList<ListModel> listTaskes(int owner);
     LinkedList<ListModel> filterTaskes(Date since, Date until, int owner);
     LinkedList<ListModel> filterTaskesByCheck(Boolean check, int owner);
     void deleteTaskes(List<ListModel> list);
     void deleteId(ListModel model);
+    void deleteIdOwner(int id, int owner);
     void deleteTask(ListModel model);
     LinkedList<ListModel> findTasks();
+    void changeTask(TaskWithIdJson json, int owner);
     void shutdown();
     void create();
 

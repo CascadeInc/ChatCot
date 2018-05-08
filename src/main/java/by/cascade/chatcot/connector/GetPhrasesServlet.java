@@ -1,9 +1,11 @@
 package by.cascade.chatcot.connector;
 
+
 import by.cascade.chatcot.storage.databaseprocessing.DataBaseException;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseAdapter;
-import by.cascade.chatcot.storage.databaseprocessing.phrases.PhraseModel;
 import by.cascade.chatcot.storage.databaseprocessing.phrases.mysql.PhrasesMySqlAdapter;
+import by.cascade.chatcot.storage.databaseprocessing.user.UserAdapter;
+import by.cascade.chatcot.storage.databaseprocessing.user.mysql.UserMySqlAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,8 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class EditPerformServlet extends HttpServlet {
-    private static final Logger LOGGER = LogManager.getLogger(EditPerformServlet.class);
+public class GetPhrasesServlet extends HttpServlet {
+    private static final Logger LOGGER = LogManager.getLogger(GetPhrasesServlet.class);
+    private static final String LIST_XML_PATH = "lists.xml";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -44,21 +47,22 @@ public class EditPerformServlet extends HttpServlet {
      */
     private void doOperation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DataBaseException {
         PhraseAdapter phraseAdapter = null;
+        UserAdapter userAdapter = null;
 
-        //String phraseItem = request.getParameter("phraseId");
-        //int id  = Integer.valueOf(phraseItem);
         try {
             phraseAdapter = new PhrasesMySqlAdapter();
+            userAdapter = new UserMySqlAdapter();
 
-            String newPhraseText = request.getParameter("phraseTextNew");
-            String newType = request.getParameter("choiceType");
-            String id = request.getParameter("phraseItemId");
-            phraseAdapter.editPhrase(Integer.valueOf(id), newPhraseText, newType);
+            MainServlet.writeJson(response, phraseAdapter.listPhrases());
+            response.setStatus(200);
         } catch (DataBaseException e) {
             LOGGER.catching(e);
             throw new RuntimeException(e);
         }
         finally {
+            if (userAdapter != null) {
+                userAdapter.shutdown();
+            }
             if (phraseAdapter != null) {
                 phraseAdapter.shutdown();
             }

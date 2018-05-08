@@ -1,5 +1,6 @@
 package by.cascade.chatcot.storage.databaseprocessing.todolists.xml;
 
+import by.cascade.chatcot.jsonmodel.TaskWithIdJson;
 import by.cascade.chatcot.storage.databaseprocessing.todolists.ListModel;
 import by.cascade.chatcot.storage.databaseprocessing.todolists.xml.*;
 import by.cascade.chatcot.storage.databaseprocessing.todolists.ListAdapter;
@@ -260,9 +261,9 @@ public class ListModelXmlAdapter implements ListAdapter {
 
 
     @Override
-    public void addTask(String text, String description, int owner) {
+    public void addTask(String text, String description, Date date, int owner) {
         LOGGER.info("adding new task: \"" + text + "\"");
-        addInEnd(new ListModel(0, new Date(), text, description, owner, false));
+        addInEnd(new ListModel(0, date, text, description, owner, false));
     }
 
     @Override
@@ -326,6 +327,20 @@ public class ListModelXmlAdapter implements ListAdapter {
     }
 
     @Override
+    public void deleteIdOwner(int id, int owner) {
+        LOGGER.info("getting filtered tasks by owner");
+        ListModel task;
+        int index = 0;
+        do {
+            task = parser.parseFromXML(path, index++);
+            if (task != null && task.getId() == id && task.getOwner() == owner) {
+                delete(index);
+                return;
+            }
+        } while (task != null);
+    }
+
+    @Override
     public void deleteTask(ListModel model) {
         LOGGER.info("getting task");
         deleteId(model);
@@ -359,5 +374,20 @@ public class ListModelXmlAdapter implements ListAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void changeTask(TaskWithIdJson json, int owner) {
+        LOGGER.info("getting filtered tasks by owner");
+        ListModel task;
+        int index = 0;
+        do {
+            task = parser.parseFromXML(path, index++);
+            if (task != null && task.getId() == json.getId() && task.getOwner() == owner) {
+                delete(index);
+                addInEnd(new ListModel(json.getId(), json.getDate(), json.getName(), json.getDescription(), owner, json.getChecked()));
+                return;
+            }
+        } while (task != null);
     }
 }

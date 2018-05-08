@@ -228,7 +228,13 @@ public class ActionProcessor {
      */
     private String doAdding(String action, LinkedList<String> arguments) {
         if (arguments.size() <= ADDING_COMMAND.getArguments()) {
-            listAdapter.addTask(arguments.get(0), arguments.get(1), owner);
+            SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+            try {
+                listAdapter.addTask(arguments.get(0), arguments.get(1), format.parse(arguments.get(2)), owner);
+            }
+            catch (ParseException e) {
+                return doNo(action);
+            }
             return doYes(action);
         }
         else {
