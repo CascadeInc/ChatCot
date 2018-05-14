@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public interface ListAdapter {
-    void addTask(String text, String description, Date date, int user);
+    int addTask(String text, String description, Date date, int user);
     LinkedList<ListModel> listTaskes(int owner);
     LinkedList<ListModel> filterTaskes(Date since, Date until, int owner);
     LinkedList<ListModel> filterTaskesByCheck(Boolean check, int owner);
