@@ -261,9 +261,11 @@ public class ListModelXmlAdapter implements ListAdapter {
 
 
     @Override
-    public void addTask(String text, String description, Date date, int owner) {
+    public int addTask(String text, String description, Date date, int owner) {
         LOGGER.info("adding new task: \"" + text + "\"");
-        addInEnd(new ListModel(0, date, text, description, owner, false));
+        int id = length() + 1;
+        addInEnd(new ListModel(id, date, text, description, owner, false));
+        return id;
     }
 
     @Override
