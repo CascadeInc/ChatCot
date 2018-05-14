@@ -23,6 +23,7 @@ public interface ListAdapter {
     void changeTask(TaskWithIdJson json, int owner);
     void shutdown();
     void create();
+    void refresh(LinkedList<TaskWithIdJson> jsonList, int owner);
 
     static LinkedList<ListModel> getTaskesModels(ResultSet set, Logger log) {
         try {

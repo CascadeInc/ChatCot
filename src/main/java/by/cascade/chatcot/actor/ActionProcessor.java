@@ -204,15 +204,14 @@ public class ActionProcessor {
                 return "INVALID ARGUMENT FOR FILTER BY CHECK";
             }
             LinkedList<ListModel> list = listAdapter.filterTaskesByCheck(Boolean.valueOf(arguments.get(0)), owner);
-            StringBuilder builder = new StringBuilder("<table border=\"1\">\n" +
-                    "<caption><fmt:message key=\"todo lists\"/></caption>\n" +
-                    "<br/>");
-            builder.append(ListModel.getHtmlTableHeader());
-            for (ListModel model : list) {
-                builder.append(model.toHTML());
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                return mapper.writeValueAsString(list);
             }
-            builder.append("</table>");
-            return builder.toString();
+            catch (JsonProcessingException e) {
+                LOGGER.catching(e);
+                return "INVALID ARGUMENT FOR FILTER";
+            }
         }
         return action;
     }

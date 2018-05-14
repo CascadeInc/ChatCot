@@ -8,7 +8,7 @@ add = function (array, name, description, dateString, id) {
         let date = new Date(dateString);
         if (isNaN(date.getTime()))
             date = new Date();
-        temp.date = date.toDateString();
+        temp.date = date.getTime();
         array.push(temp);
     }
 };
@@ -70,7 +70,7 @@ getToday = function (array) {
     const now = new Date();
     const result = [];
     array.forEach(function (item) {
-        if ((item.date.localeCompare(now.toDateString()) == 0) && (item.check == false)) {
+        if ((new Date(item.date).toDateString().localeCompare(now.toDateString()) == 0) && (item.check == false)) {
             result.push(item);
         }
     });

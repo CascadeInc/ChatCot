@@ -392,4 +392,25 @@ public class ListModelXmlAdapter implements ListAdapter {
             }
         } while (task != null);
     }
+
+    @Override
+    public void refresh(LinkedList<TaskWithIdJson> jsonList, int owner) {
+        try {
+            FileWriter fileWriter = new FileWriter(path, false);
+            LOGGER.info("adding begin of XML file");
+            fileWriter.write(ListXmlAdapter.parseToXML((ListModel) null, XMLBEGIN));
+            if (jsonList != null && !jsonList.isEmpty()) {
+                for (TaskWithIdJson json : jsonList) {
+                    fileWriter.append(ListXmlAdapter.parseToXML(new ListModel(json.getId(), json.getDate(), json.getName(), json.getDescription(), owner, json.getChecked()), XMLNONE));
+                }
+            }
+            LOGGER.info("adding end of XML file");
+            fileWriter.append(ListXmlAdapter.parseToXML((ListModel) null, XMLEND));
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGGER.error(e.getMessage());
+        }
+    }
 }

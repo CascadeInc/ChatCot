@@ -18,7 +18,7 @@ function bot_start(document) {
                     });
                     state = 0;
                     div.innerHTML = res;
-                } else if (resp.type === 8) {
+                } else if (resp.type === 8 || resp.type === 9) {
                     let reArray = JSON.parse(resp.answer);
                     let resString = "";
                     reArray.forEach(function (element) {
@@ -27,7 +27,8 @@ function bot_start(document) {
                     div.innerHTML = resString;
                     if (reArray.length == 0)
                         div.innerHTML = "There are no such elements";
-                } else
+                } else if (resp.type ===10) window.location.reload();
+                    else
                     div.innerText = resp.answer;
                 document.getElementById("botReply").appendChild(div);
             }, function () {

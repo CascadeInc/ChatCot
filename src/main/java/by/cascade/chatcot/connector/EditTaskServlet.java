@@ -11,6 +11,7 @@ import by.cascade.chatcot.storage.databaseprocessing.todolists.xml.XmlDomListPar
 import by.cascade.chatcot.storage.databaseprocessing.user.UserAdapter;
 import by.cascade.chatcot.storage.databaseprocessing.user.UserModel;
 import by.cascade.chatcot.storage.databaseprocessing.user.mysql.UserMySqlAdapter;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,11 +63,11 @@ public class EditTaskServlet extends HttpServlet {
             String userName = (String) request.getSession().getAttribute("userName");
             if (userName != null) {
                 ObjectMapper mapper = new ObjectMapper();
-                TaskWithIdJson taskJson = mapper.readValue(request.getInputStream(), TaskWithIdJson.class);
+                LinkedList<TaskWithIdJson> jsonList = mapper.readValue(request.getInputStream(), new TypeReference<LinkedList<TaskWithIdJson>>(){});
 
                 UserModel model = userAdapter.getUser(userName);
                 int id = model.getId();
-                listAdapter.changeTask(taskJson, id);
+                listAdapter.refresh(jsonList, id);
                 response.setStatus(200);
             }
         } catch (DataBaseException e) {

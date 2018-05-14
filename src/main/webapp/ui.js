@@ -29,6 +29,9 @@ function start() {
         const searchBtn = document.createElement("div");
         searchBtn.innerHTML="<span class=\"btn btn-primary\" id=\"searchBtn\">Search</span>";
         document.getElementById("searchBtnDiv").appendChild(searchBtn);
+        const score = document.createElement("div");
+        score.innerHTML=getCookie("userScore");
+        document.getElementById("fifthDynamic").appendChild(score);
         document.getElementById("logoutBtn").onclick = function(){
             new HttpClient().get("/logout", function () {
                 window.location.replace("/");
@@ -161,7 +164,14 @@ function start() {
     },function () {
 
     });
+    function updateServerData ()
+    {
+        httpClient.post("/editTask","application/json", JSON.stringify(todoList),function () {
 
+        }, function () {
+
+        })
+    }
     let glId = getStartingId(todoList);
     let addBtn = document.getElementById('addBtn');
     if (addBtn!=null)
@@ -171,7 +181,7 @@ function start() {
         const dateStr = document.getElementById("dateForm").value;
         add(todoList,name, descr, dateStr, glId);
         writeNotDoneList();
-        localStorage.setItem('todo', JSON.stringify(todoList));
+        updateServerData();
         glId++;
     };
     else return;
@@ -350,7 +360,7 @@ function start() {
 
         setChecked(todoList, id);
 
-        localStorage.setItem('todo', JSON.stringify(todoList));
+        updateServerData();
     }
 
     function editItem() {
@@ -360,7 +370,7 @@ function start() {
         el.parentNode.removeChild(el);
         const newDesc = prompt("Write new description", "write description here");
         changeDesc(todoList, id, newDesc);
-        localStorage.setItem('todo', JSON.stringify(todoList));
+        updateServerData();
         refresh();
     }
 
@@ -370,7 +380,7 @@ function start() {
         const el = document.getElementsByClassName('Task' + id)[0];
         el.parentNode.removeChild(el);
         removeItem(todoList, id);
-        localStorage.setItem('todo', JSON.stringify(todoList));
+        updateServerData();
         refresh();
     }
 

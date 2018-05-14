@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 public class TaskWithIdJson {
-    @JsonProperty("description")
-    private String name;
     @JsonProperty("todo")
+    private String name;
+    @JsonProperty("description")
     private String description;
     @JsonProperty("date")
     private Date date;
